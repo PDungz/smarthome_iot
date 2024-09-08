@@ -1,0 +1,32 @@
+[
+  {
+    "roomName": "Living Room",
+    "imageUrl": "assets/images/living_room.png",
+    "description": "Spacious and modern living room with a cozy sofa."
+  },
+  {
+    "roomName": "Bedroom",
+    "imageUrl": "assets/images/bedroom.png",
+    "description": "Comfortable bedroom with a king-sized bed and wardrobe."
+  },
+  {
+    "roomName": "Kitchen",
+    "imageUrl": "assets/images/kitchen.png",
+    "description": "Fully equipped kitchen with modern appliances."
+  },
+  {
+    "roomName": "Kitchen",
+    "imageUrl": "assets/images/kitchen.png",
+    "description": "Fully equipped kitchen with modern appliances."
+  },
+  {
+    "roomName": "Kitchen",
+    "imageUrl": "assets/images/kitchen.png",
+    "description": "Fully equipped kitchen with modern appliances."
+  },
+  {
+    "roomName": "Kitchen",
+    "imageUrl": "assets/images/kitchen.png",
+    "description": "Fully equipped kitchen with modern appliances."
+  }
+]
