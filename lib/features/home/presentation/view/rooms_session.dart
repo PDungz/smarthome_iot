@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/common/colors/app_colors.dart';
+import '../../../../core/constants/colors/app_colors.dart';
 
 class RoomsSession extends StatefulWidget {
   final List rooms;
@@ -32,7 +32,7 @@ class _RoomsSessionState extends State<RoomsSession> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          widget.rooms[index]['name'],
+                          widget.rooms[index].name,
                           style:
                               Theme.of(context).textTheme.bodyLarge?.copyWith(
                                     fontWeight: FontWeight.bold,
@@ -51,7 +51,7 @@ class _RoomsSessionState extends State<RoomsSession> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          widget.rooms[index]['name'],
+                          widget.rooms[index].name,
                           style:
                               Theme.of(context).textTheme.bodyLarge?.copyWith(
                                     fontWeight: FontWeight.bold,
@@ -69,8 +69,7 @@ class _RoomsSessionState extends State<RoomsSession> {
                   // Update the index of the current room
                   indexRoom =
                       0; // Set it to 0 since the selected room is now at the top
-                  widget
-                      .onRoomSelected(selectedRoom['_id']); // Update the roomId
+                  widget.onRoomSelected(selectedRoom.id); // Update the roomId
                 });
               },
             ),

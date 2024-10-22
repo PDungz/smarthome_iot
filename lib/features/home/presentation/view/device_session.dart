@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:smarthome_iot/core/common/colors/app_colors.dart';
-import 'package:smarthome_iot/core/common/icons/app_icons.dart';
+import 'package:smarthome_iot/core/constants/colors/app_colors.dart';
+import 'package:smarthome_iot/core/constants/icons/app_icons.dart';
 
 class DeviceSession extends StatefulWidget {
   final String iconDevice;
   final String device;
   final String decs;
   final bool isActive; // This controls the switch state
-  final Function(bool) onToggle; // Callback to toggle switch from HomeRoutes
+  final Function(bool)? onToggle; // Callback to toggle switch from HomeRoutes
 
   const DeviceSession({
     super.key,
@@ -16,7 +16,7 @@ class DeviceSession extends StatefulWidget {
     required this.device,
     required this.decs,
     required this.isActive,
-    required this.onToggle,
+    this.onToggle,
   });
 
   @override
