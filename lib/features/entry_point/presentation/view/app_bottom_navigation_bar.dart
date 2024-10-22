@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smarthome_iot/core/common/colors/app_colors.dart';
-import 'package:smarthome_iot/core/common/icons/app_icons.dart';
+import 'package:smarthome_iot/core/constants/colors/app_colors.dart';
+import 'package:smarthome_iot/core/constants/icons/app_icons.dart';
 import 'package:smarthome_iot/features/entry_point/presentation/view/bottom_app_bar_item.dart';
 
 class AppNavigationBar extends StatelessWidget {

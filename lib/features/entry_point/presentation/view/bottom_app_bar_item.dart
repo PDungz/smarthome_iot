@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:smarthome_iot/core/common/colors/app_colors.dart';
+import 'package:smarthome_iot/core/constants/colors/app_colors.dart';
 
 class BottomAppBarItem extends StatelessWidget {
   final String name;
