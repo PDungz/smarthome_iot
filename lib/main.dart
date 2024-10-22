@@ -1,14 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:smarthome_iot/core/routes/app_generate_routes.dart';
-import 'package:smarthome_iot/core/routes/app_routes.dart';
-import 'package:smarthome_iot/core/themes/app_theme_data.dart';
+import 'core/routes/app_generate_routes.dart';
+import 'core/routes/app_routes.dart';
+import 'core/themes/app_theme_data.dart';
+import 'core/utils/dot_env_util.dart';
+import 'core/services/injection_container.dart' as di;
+import 'features/login/domain/repositories/token_repository.dart';
 
 void main() async {
-  runApp(const MyApp()); // Use token validity to decide the initial route
+  WidgetsFlutterBinding.ensureInitialized();
+  await DotEnvUtil.initDotEnv();
+  await di.init();
+
+  final tokenRepository = di.getIt<TokenRepository>();
+
+  DateTime? tokenExpiryTime = await tokenRepository.getTokenExpiryTime();
+  bool isTokenValid =
+      tokenExpiryTime != null && tokenExpiryTime.isAfter(DateTime.now());
+
+  String initialRoute = isTokenValid ? AppRoutes.entry_point : AppRoutes.login;
+
+  runApp(MyApp(initialRoute: initialRoute));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String initialRoute;
+
+  const MyApp({
+    super.key,
+    required this.initialRoute,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +36,7 @@ class MyApp extends StatelessWidget {
       title: 'SmartHome',
       theme: AppThemeData.defaultheme,
       onGenerateRoute: AppGenerateRoutes.onGenerate,
-      initialRoute:
-          AppRoutes.login, // Set initial route based on token presence
+      initialRoute: initialRoute, // Use the dynamic initial route
     );
   }
 }
