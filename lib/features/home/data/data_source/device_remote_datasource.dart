@@ -53,7 +53,7 @@ class DeviceRemoteDatasourceImpl implements DeviceRemoteDatasource {
       }
 
       final reponse = await dio.put(
-        '/api/v1/device/update/${device.id}',
+        '/device/update/${device.id}',
         options: Options(
           headers: {
             'Authorization': 'Bearer $accessToken',

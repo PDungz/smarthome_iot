@@ -102,6 +102,7 @@ class _HomeRoutesState extends State<HomeRoutes> {
               BlocBuilder<DeviceBloc, DeviceState>(
                 builder: (context, state) {
                   if (state is DeviceLoading) {
+                    // Hiển thị loading khi đang tải thiết bị
                     return SliverGrid(
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -118,7 +119,7 @@ class _HomeRoutesState extends State<HomeRoutes> {
                       ),
                     );
                   } else if (state is DeviceLoaded) {
-                    // Kiểm tra xem danh sách thiết bị có trống không
+                    // Kiểm tra danh sách thiết bị có trống không
                     if (state.devices.isEmpty) {
                       return const SliverToBoxAdapter(
                           child: Center(child: Text("No devices found")));
@@ -139,7 +140,16 @@ class _HomeRoutesState extends State<HomeRoutes> {
                             device: device.name,
                             decs: device.description,
                             isActive: device.state == 'ON',
-                            onToggle: (value) => _toggleDevice(value, device),
+                            onToggle: (value) {
+                              final updatedDevice = device.copyWith(
+                                state: value
+                                    ? 'ON'
+                                    : 'OFF', // Toggle giữa ON và OFF
+                              );
+                              context
+                                  .read<DeviceBloc>()
+                                  .add(UpdateDevice(device: updatedDevice));
+                            },
                           );
                         },
                         childCount: state.devices.length,
