@@ -17,6 +17,7 @@ class StorageTokenRepository implements TokenRepository {
   Future<void> clearTokens() async {
     await secureStorage.delete(key: _accessTokenKey);
     await secureStorage.delete(key: _refreshTokenkey);
+    await secureStorage.delete(key: _tokenExpiryKey);
   }
 
   @override
