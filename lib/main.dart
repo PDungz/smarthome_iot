@@ -8,16 +8,20 @@ import 'features/login/domain/repositories/token_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await DotEnvUtil.initDotEnv();
   await di.init();
 
   final tokenRepository = di.getIt<TokenRepository>();
 
   DateTime? tokenExpiryTime = await tokenRepository.getTokenExpiryTime();
-  bool isTokenValid =
+  bool isTokenValidExpired =
       tokenExpiryTime != null && tokenExpiryTime.isAfter(DateTime.now());
+  String? accessToken = await tokenRepository.getAccessToken();
 
-  String initialRoute = isTokenValid ? AppRoutes.entry_point : AppRoutes.login;
+  String initialRoute = accessToken != null && isTokenValidExpired
+      ? AppRoutes.entry_point
+      : AppRoutes.login;
 
   runApp(MyApp(initialRoute: initialRoute));
 }
@@ -33,6 +37,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'SmartHome',
       theme: AppThemeData.defaultheme,
       onGenerateRoute: AppGenerateRoutes.onGenerate,
