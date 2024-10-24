@@ -7,6 +7,7 @@ import '../models/user_model.dart';
 
 abstract class UserRemoteDataSource {
   Future<User?> getUser();
+  Future<bool> putUser(User user, String password);
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
@@ -38,5 +39,37 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       printE("Lỗi không xác định: ${e.toString()}");
     }
     return null;
+  }
+
+  @override
+  Future<bool> putUser(User user, String password) async {
+    try {
+      final accessToken = await tokenRepository.getAccessToken();
+
+      if (accessToken == null) {
+        throw Exception("Token truy cập không tồn tại");
+      }
+
+      final response = await dio.put(
+        '/user/update',
+        options: Options(headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        }),
+        data: {
+          "fullName": user.fullName,
+          "phoneNumber": user.phoneNumber,
+          "password": password,
+        },
+      );
+      return response.statusCode == 201;
+    } on DioException catch (e) {
+      printE(
+          "[DioException] loại lỗi: ${e.type}, thông điệp lỗi: ${e.message}");
+      return false;
+    } catch (e) {
+      printE("Lỗi không xác định: ${e.toString()}");
+      return false;
+    }
   }
 }

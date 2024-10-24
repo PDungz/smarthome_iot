@@ -12,4 +12,20 @@ class User {
     required this.createdAt,
     required this.updatedAt,
   });
+
+  User copyWith({
+    String? id,
+    String? fullName,
+    String? phoneNumber,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return User(
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 }

@@ -2,44 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome_iot/core/constants/colors/app_colors.dart';
-import 'package:smarthome_iot/core/routes/app_routes.dart';
 import 'package:smarthome_iot/core/services/injection_container.dart';
 import 'package:smarthome_iot/features/add/presentation/add_routes.dart';
+import 'package:smarthome_iot/features/device/presentation/add_device_routes.dart';
+import 'package:smarthome_iot/features/device/presentation/update_device_routes.dart';
+import 'package:smarthome_iot/features/device/presentation/view_device_routes.dart';
 import 'package:smarthome_iot/features/entry_point/presentation/view/app_bottom_navigation_bar.dart';
 import 'package:smarthome_iot/features/entry_point/presentation/view/header_session.dart';
 import 'package:smarthome_iot/features/entry_point/presentation/view/header_sessionn_loading.dart';
 import 'package:smarthome_iot/features/home/presentation/home_routes.dart';
 import 'package:smarthome_iot/features/notification/presentation/notification_routes.dart';
-import 'package:smarthome_iot/features/setting/data/repository/user_repository_impl.dart';
-import 'package:smarthome_iot/features/setting/domain/repositories/user_repository.dart';
+import 'package:smarthome_iot/features/room/presentation/add_room_routes.dart';
+import 'package:smarthome_iot/features/room/presentation/update_room_routes.dart';
+import 'package:smarthome_iot/features/room/presentation/view_room_routes.dart';
 import 'package:smarthome_iot/features/setting/presentation/logic_holder/user_bloc/user_bloc.dart';
-
+import '../../../core/services/websocket_service.dart';
 import '../../../core/utils/format_date_util.dart';
+import '../data/repository/user_repository_impl.dart';
 
 class EntryPoint extends StatefulWidget {
-  const EntryPoint({super.key});
+  final int? initialIndex;
+  const EntryPoint({super.key, this.initialIndex = 0});
 
   @override
   State<EntryPoint> createState() => _EntryPointState();
 }
 
 class _EntryPointState extends State<EntryPoint> {
-  int currentIndex = 0;
+  final webSocketService = WebSocketService();
+  int _currentIndex = 0;
 
-  List<Widget> pages = [
+  // Danh sách các trang
+  final List<Widget> pages = [
     const HomeRoutes(),
     const AddRoutes(),
     const NotificationRoutes(),
+    // Room
+    const ViewRoomRoutes(),
+    const AddRoomRoutes(),
+    const UpdateRoomRoutes(),
+    // Device
+    const ViewDeviceRoutes(),
+    const AddDeviceRoutes(),
+    const UpdateDeviceRoutes(),
   ];
 
   @override
   void initState() {
     super.initState();
+    _currentIndex = widget.initialIndex!; // Khởi tạo biến với giá trị ban đầu
   }
 
   void onBottomNavigationTap(int index) {
     setState(() {
-      currentIndex = index;
+      _currentIndex = index; // Cập nhật giá trị biến riêng
     });
   }
 
@@ -63,6 +79,7 @@ class _EntryPointState extends State<EntryPoint> {
                       if (state is UserLoading) {
                         return const HeaderSessionnLoading();
                       } else if (state is UserLoaded) {
+                        webSocketService.connect(state.user.id);
                         final String fullName = state.user.fullName;
                         final String toDayTime =
                             DateUtil.formatFullDate(DateTime.now());
@@ -78,7 +95,7 @@ class _EntryPointState extends State<EntryPoint> {
                 Expanded(
                   child: Stack(
                     children: [
-                      // Page Transition Switcher
+                      // Chuyển đổi trang
                       Positioned.fill(
                         child: PageTransitionSwitcher(
                           transitionBuilder:
@@ -92,7 +109,7 @@ class _EntryPointState extends State<EntryPoint> {
                               child: child,
                             );
                           },
-                          child: pages[currentIndex],
+                          child: pages[_currentIndex], // Sử dụng biến riêng
                         ),
                       ),
                       // Thanh điều hướng dưới cùng
@@ -101,7 +118,7 @@ class _EntryPointState extends State<EntryPoint> {
                         left: 0,
                         right: 0,
                         child: AppNavigationBar(
-                          currentIndex: currentIndex,
+                          currentIndex: _currentIndex, // Sử dụng biến riêng
                           onNavTap: onBottomNavigationTap,
                         ),
                       ),

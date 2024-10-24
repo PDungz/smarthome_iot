@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:smarthome_iot/core/services/logger_service.dart';
-import 'package:smarthome_iot/features/setting/domain/entities/user.dart';
-import 'package:smarthome_iot/features/setting/domain/repositories/user_repository.dart';
+
+import '../../../domain/entities/user.dart';
+import '../../../domain/repositories/user_repository.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';

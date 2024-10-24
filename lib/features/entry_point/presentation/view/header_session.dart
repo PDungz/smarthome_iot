@@ -46,7 +46,7 @@ class HeaderSession extends StatelessWidget {
                 toDayTime, // Update with dynamic date if needed
                 style: Theme.of(context)
                     .textTheme
-                    .bodyLarge
+                    .bodyMedium
                     ?.copyWith(color: AppColors.textSecondarColor),
               ),
             ],

@@ -17,47 +17,58 @@ class AppNavigationBar extends StatelessWidget {
     return Container(
       height: 72,
       width: double.infinity,
-      margin: const EdgeInsets.all(8),
+      margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         color: AppColors.buttonColor,
         borderRadius: BorderRadius.circular(20), // Bo tròn các cạnh
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          currentIndex == 1 || currentIndex == 2
+          // Home item
+          currentIndex == 1 || currentIndex == 2 || currentIndex > 2
               ? const SizedBox(
                   width: 32,
                 )
               : const SizedBox(),
           BottomAppBarItem(
-            name: "Home",
+            name: "Home        ",
             isAction: currentIndex == 0,
             iconLocationRegular: AppIcons.home_regular,
             iconLocationSolid: AppIcons.home_solid,
             onTap: () => onNavTap(0),
           ),
+          // Spacer for equal spacing between items
+          const Spacer(),
+          // Add item
           currentIndex == 1
               ? const SizedBox(
-                  width: 32,
+                  width: 42,
                 )
               : const SizedBox(),
           currentIndex == 2
               ? const SizedBox(
-                  width: 48,
+                  width: 64,
                 )
               : const SizedBox(),
           BottomAppBarItem(
             name: "Add",
             isAction: currentIndex == 1,
             iconLocationRegular: AppIcons.plus_regular,
-            iconLocationSolid: AppIcons.plus_solid,
+            iconLocationSolid: AppIcons.plus_solid_round,
             onTap: () => onNavTap(1),
           ),
-          currentIndex == 0 || currentIndex == 1
+          // Spacer for equal spacing between items
+          const Spacer(),
+          // Notification item
+          currentIndex == 0
               ? const SizedBox(
-                  width: 32,
+                  width: 28,
+                )
+              : const SizedBox(),
+          currentIndex == 1
+              ? const SizedBox(
+                  width: 42,
                 )
               : const SizedBox(),
           BottomAppBarItem(
@@ -68,6 +79,16 @@ class AppNavigationBar extends StatelessWidget {
             onTap: () => onNavTap(2),
           ),
           currentIndex == 1
+              ? const SizedBox(
+                  width: 32,
+                )
+              : const SizedBox(),
+          currentIndex == 0
+              ? const SizedBox(
+                  width: 32,
+                )
+              : const SizedBox(),
+          currentIndex > 2
               ? const SizedBox(
                   width: 32,
                 )
