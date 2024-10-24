@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/core/common/colors/app_colors.dart';
+import '../constants/colors/app_colors.dart';
 
 class AppThemeData {
   static ThemeData get defaultheme {
@@ -17,13 +17,14 @@ class AppThemeData {
       ),
       scaffoldBackgroundColor: AppColors.primaryColor, // Màu nền cho Scaffold
       appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xff1A2232), // Màu nền cho AppBar
+        backgroundColor: AppColors.backgroundColor, // Màu nền cho AppBar
         titleTextStyle: TextStyle(
             fontSize: 18,
-            color: Colors.white,
+            color: AppColors.textPrimaryColor,
             fontFamily: 'Inter',
             fontWeight: FontWeight.w700),
-        iconTheme: IconThemeData(color: Color(0xff637394)),
+        iconTheme: IconThemeData(color: AppColors.iconPrimaryColor),
+        toolbarHeight: 68,
       ),
       textTheme: const TextTheme(
         displayLarge: TextStyle(
