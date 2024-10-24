@@ -1,15 +1,20 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:smarthome_iot/core/services/websocket_service.dart';
 import 'package:smarthome_iot/features/home/domain/entities/device.dart';
 import 'package:smarthome_iot/features/home/domain/repositories/device_repository.dart';
+
+import '../../../../../core/enums/status_state.dart';
 
 part 'device_event.dart';
 part 'device_state.dart';
 
 class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   final DeviceRepository deviceRepository;
+  final WebSocketService webSocketService;
 
-  DeviceBloc(this.deviceRepository) : super(DeviceLoading()) {
+  DeviceBloc(this.deviceRepository, this.webSocketService)
+      : super(DeviceLoading()) {
     on<LoadDevice>(_onLoadDevice);
     on<UpdateDevice>(_onUpdateDevice);
   }
@@ -41,7 +46,12 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
           final updatedDevices = currentState.devices.map((device) {
             return device.id == event.device.id ? event.device : device;
           }).toList();
-
+          webSocketService.updateDeviceState(
+            event.device.type,
+            event.device.state,
+            event.device.gate,
+            event.device.id,
+          ); // Truyền các tham số cần thiết
           emit(DeviceLoaded(devices: updatedDevices));
         }
 

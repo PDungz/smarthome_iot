@@ -1,7 +1,5 @@
 part of 'device_bloc.dart';
 
-enum StatusState { loading, success, failure }
-
 abstract class DeviceState extends Equatable {
   const DeviceState();
 

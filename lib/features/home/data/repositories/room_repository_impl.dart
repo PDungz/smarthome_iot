@@ -11,7 +11,7 @@ class RoomRepositoryImpl implements RoomRepository {
   });
 
   @override
-  Future<List<Room>?> getRooms() {
-    return remoteDatasource.getRooms();
+  Future<List<Room>?> getRooms() async {
+    return await remoteDatasource.getRooms();
   }
 }

@@ -12,6 +12,7 @@ import 'package:smarthome_iot/features/home/presentation/view/rooms_session_load
 import 'package:smarthome_iot/features/home/presentation/view/rooms_session.dart';
 import 'package:smarthome_iot/features/home/presentation/view/temperature_session.dart';
 
+import '../../../core/services/websocket_service.dart';
 import '../domain/entities/device.dart';
 
 class HomeRoutes extends StatefulWidget {
@@ -24,6 +25,7 @@ class HomeRoutes extends StatefulWidget {
 class _HomeRoutesState extends State<HomeRoutes> {
   String temperature = "";
   String humidity = "";
+  final webSocketService = WebSocketService();
   late String roomId = "66fe124019e1814a28fe110d"; // Khởi tạo roomId
 
   @override
@@ -57,9 +59,9 @@ class _HomeRoutesState extends State<HomeRoutes> {
                 ..add(LoadRoom()),
         ),
         BlocProvider<DeviceBloc>(
-          create: (context) =>
-              DeviceBloc(DeviceRepositoryImpl(remoteDatasource: getIt()))
-                ..add(LoadDevice(roomId: roomId)),
+          create: (context) => DeviceBloc(
+              DeviceRepositoryImpl(remoteDatasource: getIt()), webSocketService)
+            ..add(LoadDevice(roomId: roomId)),
         ),
       ],
       child: Scaffold(
@@ -134,9 +136,15 @@ class _HomeRoutesState extends State<HomeRoutes> {
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
+                          Map icons = {
+                            'LIGHT': AppIcons.LIGHT,
+                            'FAN': AppIcons.FAN,
+                            'SERVO': AppIcons.DOOR,
+                            'KLAXON': AppIcons.KLAXON
+                          };
                           final device = state.devices[index];
                           return DeviceSession(
-                            iconDevice: AppIcons.lightbulb_regular,
+                            iconDevice: icons[device.type],
                             device: device.name,
                             decs: device.description,
                             isActive: device.state == 'ON',
