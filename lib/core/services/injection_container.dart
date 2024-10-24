@@ -12,9 +12,13 @@ import 'package:smarthome_iot/features/login/data/repositories/auth_repository.d
 import 'package:smarthome_iot/features/login/data/repositories/storage_token_repository.dart';
 import 'package:smarthome_iot/features/login/domain/repositories/auth_repository.dart';
 import 'package:smarthome_iot/features/login/domain/repositories/token_repository.dart';
-import 'package:smarthome_iot/features/setting/data/data_source/user_remote_data_source.dart';
-import 'package:smarthome_iot/features/setting/data/repository/user_repository_impl.dart';
-import 'package:smarthome_iot/features/setting/domain/repositories/user_repository.dart';
+import 'package:smarthome_iot/features/notification/data/data_sources/notification_action_remote_datasource.dart';
+import 'package:smarthome_iot/features/notification/data/repositories/notification_action_repository_impl.dart';
+import 'package:smarthome_iot/features/notification/domain/repositories/notification_action_repository.dart';
+
+import '../../features/entry_point/data/data_source/user_remote_data_source.dart';
+import '../../features/entry_point/data/repository/user_repository_impl.dart';
+import '../../features/entry_point/domain/repositories/user_repository.dart';
 
 final getIt = GetIt.instance;
 
@@ -52,6 +56,12 @@ Future<void> init() async {
         tokenRepository: getIt<TokenRepository>()),
   );
 
+  getIt.registerLazySingleton<NotificationActionRemoteDatasource>(
+    () => NotificationActionRemoteDatasourceImpl(
+        dio: getIt<DioClient>().externalDio,
+        tokenRepository: getIt<TokenRepository>()),
+  );
+
   //! Repository
   getIt.registerLazySingleton<TokenRepository>(
     () => StorageTokenRepository(secureStorage: getIt<FlutterSecureStorage>()),
@@ -72,5 +82,10 @@ Future<void> init() async {
 
   getIt.registerLazySingleton<UserRepository>(
     () => UserRepositoryImpl(userRemoteDataSource: getIt()),
+  );
+
+  getIt.registerLazySingleton<NotificationActionRepository>(
+    () => NotificationActionRepositoryImpl(
+        notificationActionRemoteDatasource: getIt()),
   );
 }
