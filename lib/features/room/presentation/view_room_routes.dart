@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome_iot/core/constants/icons/app_icons.dart';
 import 'package:smarthome_iot/core/services/injection_container.dart';
-import 'package:smarthome_iot/features/home/data/repositories/room_repository_impl.dart';
-import 'package:smarthome_iot/features/home/presentation/logic_holder/bloc_room/room_bloc.dart';
+import 'package:smarthome_iot/features/room/data/repositories/room_repository_impl.dart';
+import 'package:smarthome_iot/features/room/presentation/logic_holder/bloc_room/room_bloc.dart';
 import 'package:smarthome_iot/features/room/presentation/views/room_session.dart';
 import 'package:smarthome_iot/features/room/presentation/views/room_session_loading.dart';
 
