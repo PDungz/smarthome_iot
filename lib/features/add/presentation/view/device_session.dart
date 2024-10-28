@@ -28,117 +28,130 @@ class _DeviceSessionState extends State<DeviceSession> {
           isAction = !isAction;
         });
       },
-      child: Container(
-        width: double.infinity,
-        margin: const EdgeInsets.all(8),
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
-        decoration: const BoxDecoration(
-          color: AppColors.backgroundColor,
-          borderRadius: BorderRadius.all(
-            Radius.circular(12),
-          ),
-        ),
-        child: isAction
-            ? Row(
-                children: [
-                  SizedBox(
-                    height: 48,
-                    width: 48,
-                    child: SvgPicture.asset(
-                      widget.iconPath,
-                      color: AppColors.iconPrimaryColor,
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Text(
-                    widget.title,
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimaryColor,
-                        ),
-                  ),
-                ],
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => Navigator.pushNamed(
-                        context, AppRoutes.entry_point,
-                        arguments: 6),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 20),
-                    ),
-                    child: Row(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+        child: Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.all(8),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+              decoration: const BoxDecoration(
+                color: AppColors.backgroundColor,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(12),
+                ),
+              ),
+              child: isAction
+                  ? Row(
                       children: [
                         SizedBox(
-                          height: 20,
-                          width: 20,
+                          height: 48,
+                          width: 48,
                           child: SvgPicture.asset(
-                            AppIcons.search_solid,
-                            color: AppColors.backgroundColor,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Text("View",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.backgroundColor)),
-                      ],
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => Navigator.pushNamed(
-                        context, AppRoutes.entry_point,
-                        arguments: 7),
-                    style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 20),
-                        backgroundColor: AppColors.buttonUpdateColor),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: SvgPicture.asset(
-                            AppIcons.plus_solid,
+                            widget.iconPath,
                             color: AppColors.iconPrimaryColor,
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        Text("Add",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(fontWeight: FontWeight.bold)),
+                        const SizedBox(width: 20),
+                        Text(
+                          widget.title,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineLarge
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textPrimaryColor,
+                              ),
+                        ),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () => Navigator.pushNamed(
+                              context, AppRoutes.entry_point,
+                              arguments: [6, ""]),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 20),
+                          ),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: SvgPicture.asset(
+                                  AppIcons.search_solid,
+                                  color: AppColors.backgroundColor,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Text("View",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.backgroundColor)),
+                            ],
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () => Navigator.pushNamed(
+                              context, AppRoutes.entry_point,
+                              arguments: [7, ""]),
+                          style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 20),
+                              backgroundColor: AppColors.buttonUpdateColor),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                height: 24,
+                                width: 24,
+                                child: SvgPicture.asset(
+                                  AppIcons.plus_solid,
+                                  color: AppColors.iconPrimaryColor,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Text("Add",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 0),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(32)),
-                      backgroundColor: Colors.red, // Set background color
+            ),
+            isAction != true
+                ? Positioned(
+                    top: 2,
+                    right: 2,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isAction = !isAction;
+                        });
+                      },
+                      child: Container(
+                          width: 36,
+                          height: 36,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          alignment: Alignment.center,
+                          child: const Icon(Icons.close)),
                     ),
-                    onPressed: () {
-                      setState(() {
-                        isAction = !isAction;
-                      });
-                    },
-                    child: SvgPicture.asset(
-                      AppIcons.close_solid,
-                      color: AppColors.primaryColor,
-                      height: 20,
-                    ),
-                  ),
-                ],
-              ),
+                  )
+                : const SizedBox(),
+          ],
+        ),
       ),
     );
   }
