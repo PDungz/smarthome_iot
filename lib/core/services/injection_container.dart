@@ -2,11 +2,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:smarthome_iot/core/apis/dio_client.dart';
 import 'package:smarthome_iot/features/home/data/data_source/device_remote_datasource.dart';
-import 'package:smarthome_iot/features/home/data/data_source/room_remote_datasource.dart';
+import 'package:smarthome_iot/features/room/data/datasource/room_remote_datasource.dart';
 import 'package:smarthome_iot/features/home/data/repositories/device_repository_impl.dart';
-import 'package:smarthome_iot/features/home/data/repositories/room_repository_impl.dart';
+import 'package:smarthome_iot/features/room/data/repositories/room_repository_impl.dart';
 import 'package:smarthome_iot/features/home/domain/repositories/device_repository.dart';
-import 'package:smarthome_iot/features/home/domain/repositories/room_repository.dart';
+import 'package:smarthome_iot/features/room/domain/repositories/room_repository.dart';
 import 'package:smarthome_iot/features/login/data/data_sources/auth_remote_datasource.dart';
 import 'package:smarthome_iot/features/login/data/repositories/auth_repository.dart';
 import 'package:smarthome_iot/features/login/data/repositories/storage_token_repository.dart';
@@ -32,10 +32,12 @@ Future<void> init() async {
       () => DioClient(tokenRepository: getIt()));
 
   //! Remote Data Source
+  // Auth
   getIt.registerLazySingleton<AuthRemoteDatasource>(
     () => AuthRemoteDatasourceImpl(dio: getIt<DioClient>().externalDio),
   );
 
+  // Room
   getIt.registerLazySingleton<RoomRemoteDatasource>(
     () => RoomRemoteDatasourceImpl(
       dio: getIt<DioClient>().externalDio,
@@ -43,6 +45,7 @@ Future<void> init() async {
     ),
   );
 
+  // Device
   getIt.registerLazySingleton<DeviceRemoteDatasource>(
     () => DeviceRemoteDatasourceImpl(
       dio: getIt<DioClient>().externalDio,
@@ -50,12 +53,14 @@ Future<void> init() async {
     ),
   );
 
+  // User
   getIt.registerLazySingleton<UserRemoteDataSource>(
     () => UserRemoteDataSourceImpl(
         dio: getIt<DioClient>().externalDio,
         tokenRepository: getIt<TokenRepository>()),
   );
 
+  // Notification
   getIt.registerLazySingleton<NotificationActionRemoteDatasource>(
     () => NotificationActionRemoteDatasourceImpl(
         dio: getIt<DioClient>().externalDio,
