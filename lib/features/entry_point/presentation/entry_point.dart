@@ -22,7 +22,12 @@ import '../data/repository/user_repository_impl.dart';
 
 class EntryPoint extends StatefulWidget {
   final int? initialIndex;
-  const EntryPoint({super.key, this.initialIndex = 0});
+  final String? id;
+  const EntryPoint({
+    super.key,
+    this.initialIndex = 0,
+    this.id,
+  });
 
   @override
   State<EntryPoint> createState() => _EntryPointState();
@@ -33,19 +38,21 @@ class _EntryPointState extends State<EntryPoint> {
   int _currentIndex = 0;
 
   // Danh sách các trang
-  final List<Widget> pages = [
-    const HomeRoutes(),
-    const AddRoutes(),
-    const NotificationRoutes(),
-    // Room
-    const ViewRoomRoutes(),
-    const AddRoomRoutes(),
-    const UpdateRoomRoutes(),
-    // Device
-    const ViewDeviceRoutes(),
-    const AddDeviceRoutes(),
-    const UpdateDeviceRoutes(),
-  ];
+  List<Widget> get pages => [
+        const HomeRoutes(),
+        const AddRoutes(),
+        const NotificationRoutes(),
+        // Room
+        const ViewRoomRoutes(),
+        const AddRoomRoutes(),
+        UpdateRoomRoutes(
+          roomId: widget.id,
+        ),
+        // Device
+        const ViewDeviceRoutes(),
+        const AddDeviceRoutes(),
+        const UpdateDeviceRoutes(),
+      ];
 
   @override
   void initState() {
@@ -66,6 +73,7 @@ class _EntryPointState extends State<EntryPoint> {
           UserBloc(UserRepositoryImpl(userRemoteDataSource: getIt()))
             ..add(LoadUser()),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -95,7 +103,7 @@ class _EntryPointState extends State<EntryPoint> {
                 Expanded(
                   child: Stack(
                     children: [
-                      // Chuyển đổi trang
+                      // Page transition
                       Positioned.fill(
                         child: PageTransitionSwitcher(
                           transitionBuilder:
@@ -109,16 +117,17 @@ class _EntryPointState extends State<EntryPoint> {
                               child: child,
                             );
                           },
-                          child: pages[_currentIndex], // Sử dụng biến riêng
+                          child:
+                              pages[_currentIndex], // Use the private variable
                         ),
                       ),
-                      // Thanh điều hướng dưới cùng
+                      // Bottom navigation bar
                       Positioned(
                         bottom: 0,
                         left: 0,
                         right: 0,
                         child: AppNavigationBar(
-                          currentIndex: _currentIndex, // Sử dụng biến riêng
+                          currentIndex: _currentIndex,
                           onNavTap: onBottomNavigationTap,
                         ),
                       ),
