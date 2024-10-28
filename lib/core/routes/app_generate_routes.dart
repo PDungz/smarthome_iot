@@ -26,10 +26,12 @@ class AppGenerateRoutes {
 
       // Entry point
       case AppRoutes.entry_point:
-        final int initialIndex = settings.arguments as int? ?? 0;
+        final args = settings.arguments as List<dynamic>? ?? [0, ''];
+        final int initialIndex = args[0] as int;
+        final String id = args[1] as String;
         return CupertinoPageRoute(
-            builder: (_) => EntryPoint(initialIndex: initialIndex));
-
+          builder: (_) => EntryPoint(initialIndex: initialIndex, id: id),
+        );
       // Home
       case AppRoutes.home:
         return CupertinoPageRoute(builder: (_) => const HomeRoutes());
