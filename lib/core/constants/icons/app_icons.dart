@@ -6,6 +6,9 @@ class AppIcons {
   static const notification_solid = "assets/icons/notification_solid.svg";
   static const search_solid = "assets/icons/search-solid.svg";
   static const close_solid = "assets/icons/close-solid.svg";
+  static const temperature_solid = "assets/icons/temperature-solid.svg";
+  static const droplet_solid = "assets/icons/droplet-solid.svg";
+  static const fire_solid = "assets/icons/fire-solid.svg";
 
   // regular
   static const home_regular = "assets/icons/home_regular.svg";
