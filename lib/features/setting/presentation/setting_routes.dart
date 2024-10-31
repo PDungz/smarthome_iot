@@ -173,10 +173,23 @@ class _SettingRoutesState extends State<SettingRoutes> {
                                 ),
                               ),
                               const SizedBox(height: 16),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 8, top: 12, bottom: 16),
+                                child: Text(
+                                  "Setting",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium
+                                      ?.copyWith(
+                                          color: AppColors.textSecondarColor),
+                                ),
+                              ),
                             ],
                           ),
                         ),
-                      )
+                      ),
+                      const SizedBox(height: 100),
                     ],
                   ),
                 ),
