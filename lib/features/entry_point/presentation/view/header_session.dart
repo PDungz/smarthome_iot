@@ -18,38 +18,44 @@ class HeaderSession extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
-          height: 56,
-          width: 56,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/Profile.png"),
-              fit: BoxFit.cover, // Keep the image aspect ratio
+        InkWell(
+          onTap: () => Navigator.pushNamed(context, AppRoutes.profile),
+          child: Container(
+            height: 56,
+            width: 56,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/Profile.png"),
+                fit: BoxFit.cover, // Keep the image aspect ratio
+              ),
             ),
           ),
         ),
         const SizedBox(width: 24),
         // Use Expanded to prevent overflow
         Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                fullName,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(fontWeight: FontWeight.w900),
-              ),
-              Text(
-                toDayTime, // Update with dynamic date if needed
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: AppColors.textSecondarColor),
-              ),
-            ],
+          child: InkWell(
+            onTap: () => Navigator.pushNamed(context, AppRoutes.profile),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  fullName,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(fontWeight: FontWeight.w900),
+                ),
+                Text(
+                  toDayTime, // Update with dynamic date if needed
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(color: AppColors.textSecondarColor),
+                ),
+              ],
+            ),
           ),
         ),
         IconButton(
