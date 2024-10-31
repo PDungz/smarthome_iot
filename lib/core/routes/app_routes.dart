@@ -24,6 +24,9 @@ class AppRoutes {
   // Notification
   static const notification = '/notification';
 
+  // Profile
+  static const profile = '/profile';
+
   // Setting
   static const setting = '/setting';
 }

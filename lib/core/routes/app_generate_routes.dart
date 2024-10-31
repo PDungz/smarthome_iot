@@ -8,6 +8,7 @@ import 'package:smarthome_iot/features/entry_point/presentation/entry_point.dart
 import 'package:smarthome_iot/features/home/presentation/home_routes.dart';
 import 'package:smarthome_iot/features/login/presentation/screens/login_routes.dart';
 import 'package:smarthome_iot/features/notification/presentation/notification_routes.dart';
+import 'package:smarthome_iot/features/profile/presentation/profile_routes.dart';
 import 'package:smarthome_iot/features/room/presentation/add_room_routes.dart';
 import 'package:smarthome_iot/features/room/presentation/update_room_routes.dart';
 import 'package:smarthome_iot/features/setting/presentation/setting_routes.dart';
@@ -63,6 +64,10 @@ class AppGenerateRoutes {
       // Notification
       case AppRoutes.notification:
         return CupertinoPageRoute(builder: (_) => const NotificationRoutes());
+
+      // Setting
+      case AppRoutes.profile:
+        return CupertinoPageRoute(builder: (_) => const ProfileRoutes());
 
       // Setting
       case AppRoutes.setting:
