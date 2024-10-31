@@ -29,4 +29,9 @@ class RoomRepositoryImpl implements RoomRepository {
   Future<Room?> getRoomById(String roomId) async {
     return await remoteDatasource.getRoomById(roomId);
   }
+
+  @override
+  Future<bool> deleteRoom(String roomId) async {
+    return await remoteDatasource.deleteRoom(roomId);
+  }
 }

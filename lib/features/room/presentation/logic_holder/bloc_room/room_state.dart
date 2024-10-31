@@ -7,10 +7,17 @@ class RoomLoading extends RoomState {}
 
 class RoomInitial extends RoomState {}
 
-class RoomLoaded extends RoomState {
+class RoomsLoaded extends RoomState {
   final List<Room> rooms;
-  RoomLoaded({
+  RoomsLoaded({
     required this.rooms,
+  });
+}
+
+class RoomLoaded extends RoomState {
+  final Room room;
+  RoomLoaded({
+    required this.room,
   });
 }
 
@@ -46,6 +53,25 @@ class RoomPut extends RoomState {
     String? Msg,
   }) {
     return RoomPut(
+      status: status ?? this.status,
+      Msg: Msg ?? this.Msg,
+    );
+  }
+}
+
+class RoomDelete extends RoomState {
+  final StatusState status;
+  final String? Msg;
+  RoomDelete({
+    this.status = StatusState.idle,
+    this.Msg,
+  });
+
+  RoomDelete copyWith({
+    StatusState? status,
+    String? Msg,
+  }) {
+    return RoomDelete(
       status: status ?? this.status,
       Msg: Msg ?? this.Msg,
     );

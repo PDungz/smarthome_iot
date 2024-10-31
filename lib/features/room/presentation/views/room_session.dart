@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:smarthome_iot/core/routes/app_routes.dart';
 import 'package:smarthome_iot/features/room/domain/entities/room.dart';
 import '../../../../core/constants/colors/app_colors.dart';
 import '../../../../core/constants/icons/app_icons.dart';
+import '../logic_holder/bloc_room/room_bloc.dart';
 
 class RoomSession extends StatefulWidget {
   final String iconRoom;
@@ -132,7 +134,7 @@ class _RoomSessionState extends State<RoomSession> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(width: 28),
                       SizedBox(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -142,7 +144,9 @@ class _RoomSessionState extends State<RoomSession> {
                                 .buttonDeleteColor, // Set background color
                           ),
                           onPressed: () {
-                            // Add functionality here
+                            context
+                                .read<RoomBloc>()
+                                .add(DeleteRoom(roomId: widget.room.id));
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

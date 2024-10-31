@@ -5,4 +5,5 @@ abstract class RoomRepository {
   Future<Room?> getRoomById(String roomId);
   Future<bool> postRoom(Room room);
   Future<bool> putRoom(Room room);
+  Future<bool> deleteRoom(String roomId);
 }

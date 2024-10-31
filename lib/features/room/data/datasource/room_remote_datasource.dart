@@ -10,6 +10,7 @@ abstract class RoomRemoteDatasource {
   Future<Room?> getRoomById(String roomId);
   Future<bool> postRoom(Room room);
   Future<bool> putRoom(Room room);
+  Future<bool> deleteRoom(String roomId);
 }
 
 class RoomRemoteDatasourceImpl implements RoomRemoteDatasource {
@@ -120,7 +121,7 @@ class RoomRemoteDatasourceImpl implements RoomRemoteDatasource {
       }
 
       final response = await dio.get(
-        "/room/get-by-user",
+        "/room/$roomId",
         options: Options(
           headers: {
             'Authorization': 'Bearer $accessToken',
@@ -137,5 +138,33 @@ class RoomRemoteDatasourceImpl implements RoomRemoteDatasource {
       printE("Lỗi không xác định: ${e.toString()}");
     }
     return null;
+  }
+
+  @override
+  Future<bool> deleteRoom(String roomId) async {
+    try {
+      final accessToken = await tokenRepository.getAccessToken();
+
+      if (accessToken == null) {
+        throw Exception("Token truy cập không tồn tại");
+      }
+      final respose = await dio.delete(
+        '/room/delete/$roomId',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+      return respose.statusCode == 200;
+    } on DioException catch (e) {
+      printE(
+          "[DioException] loại lỗi: ${e.type}, thông điệp lỗi: ${e.message}");
+      return false;
+    } catch (e) {
+      printE("Lỗi không xác định: ${e.toString()}");
+      return false;
+    }
   }
 }

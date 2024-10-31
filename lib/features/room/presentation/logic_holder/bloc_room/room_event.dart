@@ -3,7 +3,14 @@ part of 'room_bloc.dart';
 
 abstract class RoomEvent {}
 
-class LoadRoom extends RoomEvent {}
+class LoadRooms extends RoomEvent {}
+
+class LoadRoom extends RoomEvent {
+  final String roomId;
+  LoadRoom({
+    required this.roomId,
+  });
+}
 
 class PostRoom extends RoomEvent {
   final Room room;
@@ -16,5 +23,12 @@ class PutRoom extends RoomEvent {
   final Room room;
   PutRoom({
     required this.room,
+  });
+}
+
+class DeleteRoom extends RoomEvent {
+  final String roomId;
+  DeleteRoom({
+    required this.roomId,
   });
 }

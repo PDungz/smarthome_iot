@@ -6,6 +6,7 @@ import 'package:smarthome_iot/features/room/data/repositories/room_repository_im
 import 'package:smarthome_iot/features/room/presentation/logic_holder/bloc_room/room_bloc.dart';
 import 'package:smarthome_iot/features/room/presentation/views/text_field_form_room_session.dart';
 import '../../../core/enums/status_state.dart';
+import '../../../core/routes/app_routes.dart';
 import '../domain/entities/room.dart';
 
 class AddRoomRoutes extends StatefulWidget {
@@ -32,7 +33,7 @@ class _AddRoomRoutesState extends State<AddRoomRoutes> {
     return BlocProvider<RoomBloc>(
       create: (context) =>
           RoomBloc(RoomRepositoryImpl(remoteDatasource: getIt()))
-            ..add(LoadRoom()),
+            ..add(LoadRooms()),
       child: BlocConsumer<RoomBloc, RoomState>(
         listener: (context, state) {
           if (state is RoomPost) {
@@ -135,9 +136,11 @@ class _AddRoomRoutesState extends State<AddRoomRoutes> {
           actions: [
             TextButton(
               child: const Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
+              onPressed: () => Navigator.pushNamed(
+                context,
+                AppRoutes.entry_point,
+                arguments: [3, ""],
+              ),
             ),
           ],
         );
