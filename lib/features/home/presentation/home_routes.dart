@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome_iot/core/constants/icons/app_icons.dart';
 import 'package:smarthome_iot/core/services/injection_container.dart';
-import 'package:smarthome_iot/features/home/data/repositories/device_repository_impl.dart';
+import 'package:smarthome_iot/features/device/data/repositories/device_repository_impl.dart';
 import 'package:smarthome_iot/features/room/data/repositories/room_repository_impl.dart';
-import 'package:smarthome_iot/features/home/presentation/logic_holder/bloc_device/device_bloc.dart';
+import 'package:smarthome_iot/features/device/presentation/logic_holder/bloc_device/device_bloc.dart';
 import 'package:smarthome_iot/features/room/presentation/logic_holder/bloc_room/room_bloc.dart';
 import 'package:smarthome_iot/features/home/presentation/view/device_session.dart';
 import 'package:smarthome_iot/features/home/presentation/view/device_session_loading.dart';
@@ -13,7 +13,7 @@ import 'package:smarthome_iot/features/home/presentation/view/rooms_session.dart
 import 'package:smarthome_iot/features/home/presentation/view/temperature_session.dart';
 
 import '../../../core/services/websocket_service.dart';
-import '../domain/entities/device.dart';
+import '../../device/domain/entities/device.dart';
 
 class HomeRoutes extends StatefulWidget {
   const HomeRoutes({super.key});
@@ -56,7 +56,7 @@ class _HomeRoutesState extends State<HomeRoutes> {
         BlocProvider<RoomBloc>(
           create: (context) =>
               RoomBloc(RoomRepositoryImpl(remoteDatasource: getIt()))
-                ..add(LoadRoom()),
+                ..add(LoadRooms()),
         ),
         BlocProvider<DeviceBloc>(
           create: (context) => DeviceBloc(
@@ -81,7 +81,7 @@ class _HomeRoutesState extends State<HomeRoutes> {
                   builder: (context, state) {
                     if (state is RoomLoading) {
                       return const RoomsSessionLoading();
-                    } else if (state is RoomLoaded) {
+                    } else if (state is RoomsLoaded) {
                       return RoomsSession(
                         rooms: state.rooms,
                         onRoomSelected: (String selectedRoomId) {
@@ -120,7 +120,7 @@ class _HomeRoutesState extends State<HomeRoutes> {
                         childCount: 6,
                       ),
                     );
-                  } else if (state is DeviceLoaded) {
+                  } else if (state is DevicesLoaded) {
                     // Kiểm tra danh sách thiết bị có trống không
                     if (state.devices.isEmpty) {
                       return const SliverToBoxAdapter(
@@ -144,6 +144,7 @@ class _HomeRoutesState extends State<HomeRoutes> {
                           };
                           final device = state.devices[index];
                           return DeviceSession(
+                            id: device.id,
                             iconDevice: icons[device.type],
                             device: device.name,
                             decs: device.description,
