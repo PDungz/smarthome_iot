@@ -1,11 +1,11 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:smarthome_iot/core/apis/dio_client.dart';
-import 'package:smarthome_iot/features/home/data/data_source/device_remote_datasource.dart';
+import 'package:smarthome_iot/features/device/data/data_source/device_remote_datasource.dart';
 import 'package:smarthome_iot/features/room/data/datasource/room_remote_datasource.dart';
-import 'package:smarthome_iot/features/home/data/repositories/device_repository_impl.dart';
+import 'package:smarthome_iot/features/device/data/repositories/device_repository_impl.dart';
 import 'package:smarthome_iot/features/room/data/repositories/room_repository_impl.dart';
-import 'package:smarthome_iot/features/home/domain/repositories/device_repository.dart';
+import 'package:smarthome_iot/features/device/domain/repositories/device_repository.dart';
 import 'package:smarthome_iot/features/room/domain/repositories/room_repository.dart';
 import 'package:smarthome_iot/features/login/data/data_sources/auth_remote_datasource.dart';
 import 'package:smarthome_iot/features/login/data/repositories/auth_repository.dart';

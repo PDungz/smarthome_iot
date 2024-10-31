@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:smarthome_iot/core/services/logger_service.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class WebSocketService {
@@ -24,6 +25,7 @@ class WebSocketService {
       "device": "android", // Loại thiết bị
       "userID": userID // ID người dùng
     };
+    printI("RegisterData: $registerData");
     _sendData(registerData);
   }
 
@@ -37,6 +39,7 @@ class WebSocketService {
       "gate": gate,
       "ip": ip
     };
+    printI("RegisterData: $controlData");
     _sendData(controlData);
   }
 
