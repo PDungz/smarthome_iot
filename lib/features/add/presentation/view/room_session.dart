@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:smarthome_iot/core/constants/colors/app_colors.dart';
 import 'package:smarthome_iot/core/constants/icons/app_icons.dart';
 import '../../../../core/routes/app_routes.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 class RoomSession extends StatefulWidget {
   final String iconPath;
@@ -98,7 +99,7 @@ class _RoomSessionState extends State<RoomSession> {
                                   ),
                                 ),
                                 const SizedBox(width: 10),
-                                Text("View",
+                                Text(AppLocalizations.of(context)!.view,
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyLarge
@@ -130,7 +131,7 @@ class _RoomSessionState extends State<RoomSession> {
                                   ),
                                 ),
                                 const SizedBox(width: 10),
-                                Text("View",
+                                Text(AppLocalizations.of(context)!.add,
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyLarge

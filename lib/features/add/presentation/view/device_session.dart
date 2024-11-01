@@ -4,6 +4,8 @@ import 'package:smarthome_iot/core/constants/colors/app_colors.dart';
 import 'package:smarthome_iot/core/constants/icons/app_icons.dart';
 import 'package:smarthome_iot/core/routes/app_routes.dart';
 
+import '../../../../l10n/generated/app_localizations.dart';
+
 class DeviceSession extends StatefulWidget {
   final String iconPath;
   final String title;
@@ -88,7 +90,7 @@ class _DeviceSessionState extends State<DeviceSession> {
                                 ),
                               ),
                               const SizedBox(width: 10),
-                              Text("View",
+                              Text(AppLocalizations.of(context)!.view,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyLarge
@@ -117,7 +119,7 @@ class _DeviceSessionState extends State<DeviceSession> {
                                 ),
                               ),
                               const SizedBox(width: 10),
-                              Text("Add",
+                              Text(AppLocalizations.of(context)!.add,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyLarge
