@@ -2,19 +2,42 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/colors/app_colors.dart';
 import '../../../../core/constants/components/components_textfield/custom_text_form_field.dart';
 
-class TextFieldSession extends StatelessWidget {
+class TextFieldSession extends StatefulWidget {
   final String fieldName;
-  final TextEditingController textEditingController;
+  final String? currentValue;
   final EdgeInsetsGeometry? contentPadding;
-  final FormFieldValidator<String>? validator; // Add validator parameter
+  final FormFieldValidator<String>? validator;
+  final void Function(String)? onChanged;
 
   const TextFieldSession({
     super.key,
     required this.fieldName,
-    required this.textEditingController,
+    required this.currentValue,
     this.contentPadding,
-    this.validator, // Initialize validator
+    this.validator,
+    this.onChanged,
   });
+
+  @override
+  State<TextFieldSession> createState() => _TextFieldSessionState();
+}
+
+class _TextFieldSessionState extends State<TextFieldSession> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.currentValue);
+  }
+
+  @override
+  void didUpdateWidget(covariant TextFieldSession oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.currentValue != oldWidget.currentValue) {
+      _controller.text = widget.currentValue ?? '';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +47,7 @@ class TextFieldSession extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            fieldName,
+            widget.fieldName,
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge
@@ -32,10 +55,11 @@ class TextFieldSession extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           CustomTextFormField(
-            hintText: fieldName,
-            controller: textEditingController,
-            validator: validator, // Use the validator passed from parent
-            contentPadding: contentPadding,
+            hintText: widget.fieldName,
+            controller: _controller,
+            onChanged: widget.onChanged,
+            validator: widget.validator,
+            contentPadding: widget.contentPadding,
             hasBorder: true,
             fillColor: AppColors.primaryColor,
             customBorder: const OutlineInputBorder(
@@ -58,5 +82,11 @@ class TextFieldSession extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
