@@ -131,11 +131,14 @@ class $AssetsSvgGen {
   /// File path: assets/svg/es.svg
   String get es => 'assets/svg/es.svg';
 
+  /// File path: assets/svg/us-flag.svg
+  String get usFlag => 'assets/svg/us-flag.svg';
+
   /// File path: assets/svg/vietnam-flag.svg
   String get vietnamFlag => 'assets/svg/vietnam-flag.svg';
 
   /// List of all assets
-  List<String> get values => [es, vietnamFlag];
+  List<String> get values => [es, usFlag, vietnamFlag];
 }
 
 class Assets {
