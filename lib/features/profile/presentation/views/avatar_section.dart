@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome_iot/core/services/logger_service.dart';
 
 import '../logic_holder/bloc/account_info_bloc.dart';
 
