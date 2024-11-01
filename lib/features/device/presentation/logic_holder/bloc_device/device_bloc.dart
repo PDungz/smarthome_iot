@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:smarthome_iot/core/services/websocket_service.dart';
 import 'package:smarthome_iot/features/device/domain/entities/device.dart';
 import 'package:smarthome_iot/features/device/domain/repositories/device_repository.dart';
+import 'package:smarthome_iot/features/room/domain/repositories/room_repository.dart';
 
 import '../../../../../core/enums/status_state.dart';
 
@@ -11,9 +12,10 @@ part 'device_state.dart';
 
 class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   final DeviceRepository deviceRepository;
+  final RoomRepository roomRepository;
   final WebSocketService webSocketService;
 
-  DeviceBloc(this.deviceRepository, this.webSocketService)
+  DeviceBloc(this.deviceRepository, this.webSocketService, this.roomRepository)
       : super(DeviceLoading()) {
     on<LoadDevice>(_onLoadDevicesByRoomId);
     on<UpdateDevice>(_onUpdateDevice);
@@ -36,10 +38,25 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
       LoadDevice event, Emitter<DeviceState> emit) async {
     emit(DeviceLoading());
 
+    List<Device>? devices = []; // Khởi tạo biến devices ở đây
+
     try {
-      final devices = await deviceRepository.getDevicesByRoomId(event.roomId);
+      if (event.roomId == "") {
+        final rooms = await roomRepository.getRooms();
+        if (rooms != null && rooms.isNotEmpty) {
+          final roomId = rooms.first.id; // Lấy roomId từ phòng đầu tiên
+          devices = await deviceRepository.getDevicesByRoomId(roomId);
+        } else {
+          emit(const DeviceError(
+              Msg: "No rooms available")); // Thông báo lỗi nếu không có phòng
+          return; // Dừng xử lý nếu không có phòng
+        }
+      } else {
+        devices = await deviceRepository.getDevicesByRoomId(event.roomId!);
+      }
       emit(DevicesLoaded(devices: devices ?? []));
     } catch (e) {
+      print("Error loading devices: $e"); // Log lỗi chi tiết
       emit(DeviceError(Msg: e.toString()));
     }
   }

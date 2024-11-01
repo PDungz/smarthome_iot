@@ -16,7 +16,9 @@ class ViewDeviceRoutes extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<DeviceBloc>(
       create: (context) => DeviceBloc(
-          DeviceRepositoryImpl(remoteDatasource: getIt()), WebSocketService())
+          DeviceRepositoryImpl(remoteDatasource: getIt()),
+          WebSocketService(),
+          getIt())
         ..add(LoadDevices()),
       child: SafeArea(
         child: Padding(

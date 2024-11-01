@@ -10,12 +10,12 @@ abstract class DeviceEvent extends Equatable {
 class LoadDevices extends DeviceEvent {}
 
 class LoadDevice extends DeviceEvent {
-  final String roomId;
+  final String? roomId;
 
-  const LoadDevice({required this.roomId});
+  const LoadDevice({this.roomId});
 
   @override
-  List<Object> get props => [roomId];
+  List<Object> get props => [roomId ?? ""];
 }
 
 class UpdateDevice extends DeviceEvent {
