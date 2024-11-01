@@ -26,7 +26,7 @@ class _HomeRoutesState extends State<HomeRoutes> {
   String temperature = "";
   String humidity = "";
   final webSocketService = WebSocketService();
-  late String roomId = "66fe124019e1814a28fe110d"; // Khởi tạo roomId
+  late String roomId = ""; // Khởi tạo roomId
 
   @override
   void initState() {
@@ -60,7 +60,9 @@ class _HomeRoutesState extends State<HomeRoutes> {
         ),
         BlocProvider<DeviceBloc>(
           create: (context) => DeviceBloc(
-              DeviceRepositoryImpl(remoteDatasource: getIt()), webSocketService)
+              DeviceRepositoryImpl(remoteDatasource: getIt()),
+              webSocketService,
+              getIt())
             ..add(LoadDevice(roomId: roomId)),
         ),
       ],
