@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome_iot/core/routes/app_routes.dart';
 import 'package:smarthome_iot/features/login/domain/repositories/token_repository.dart';
+import 'package:smarthome_iot/features/setting/presentation/views/setting_language_session.dart';
 
 import '../../../core/constants/colors/app_colors.dart';
 import '../../../core/enums/status_state.dart';
 import '../../../core/services/injection_container.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../entry_point/data/repository/user_repository_impl.dart';
 import 'logic_holder/user_bloc/user_bloc.dart';
 import 'views/text_field_form_session.dart';
@@ -37,9 +39,14 @@ class _SettingRoutesState extends State<SettingRoutes> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Padding(
+        title: Padding(
           padding: EdgeInsets.only(left: 8),
-          child: Center(child: Text('Setting')),
+          child: Center(
+              child: Text(
+            AppLocalizations.of(context)!.setting,
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold, color: AppColors.textPrimaryColor),
+          )),
         ),
         actions: [
           Padding(
@@ -132,7 +139,7 @@ class _SettingRoutesState extends State<SettingRoutes> {
                                 padding: const EdgeInsets.only(
                                     left: 8, top: 12, bottom: 16),
                                 child: Text(
-                                  "Information",
+                                  AppLocalizations.of(context)!.information,
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineLarge
@@ -168,7 +175,8 @@ class _SettingRoutesState extends State<SettingRoutes> {
                                         );
                                       }
                                     },
-                                    child: const Text("Update"),
+                                    child: Text(
+                                        AppLocalizations.of(context)!.update),
                                   ),
                                 ),
                               ),
@@ -177,7 +185,7 @@ class _SettingRoutesState extends State<SettingRoutes> {
                                 padding: const EdgeInsets.only(
                                     left: 8, top: 12, bottom: 16),
                                 child: Text(
-                                  "Setting",
+                                  AppLocalizations.of(context)!.setting,
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineMedium
@@ -185,6 +193,8 @@ class _SettingRoutesState extends State<SettingRoutes> {
                                           color: AppColors.textSecondarColor),
                                 ),
                               ),
+                              SettingLanguageSession(),
+                              const SizedBox(height: 32),
                             ],
                           ),
                         ),

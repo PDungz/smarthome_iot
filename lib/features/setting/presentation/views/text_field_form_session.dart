@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/utils/validators.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import 'text_field_session.dart';
 
 class TextFieldFormSession extends StatelessWidget {
@@ -22,28 +23,28 @@ class TextFieldFormSession extends StatelessWidget {
     return Column(
       children: [
         TextFieldSession(
-          fieldName: "Full Name",
+          fieldName: AppLocalizations.of(context)!.full_name,
           textEditingController: fullNameController,
           validator: Validators.requirdWithFieldName('Full Name').call,
           contentPadding: const EdgeInsets.symmetric(horizontal: 12),
         ),
         const SizedBox(height: 8),
         TextFieldSession(
-          fieldName: "Phone number",
+          fieldName: AppLocalizations.of(context)!.phone_number,
           textEditingController: phoneNumberTexController,
           validator: Validators.phoneNumber.call,
           contentPadding: const EdgeInsets.symmetric(horizontal: 12),
         ),
         const SizedBox(height: 8),
         TextFieldSession(
-          fieldName: "Password",
+          fieldName: AppLocalizations.of(context)!.password,
           textEditingController: passwordTextController,
           validator: Validators.password.call, // Add password validator
           contentPadding: const EdgeInsets.symmetric(horizontal: 12),
         ),
         const SizedBox(height: 8),
         TextFieldSession(
-          fieldName: "Confirm password",
+          fieldName: AppLocalizations.of(context)!.confirm_password,
           textEditingController: confirmPasswordTextController,
           contentPadding: const EdgeInsets.symmetric(horizontal: 12),
           validator: (value) {
