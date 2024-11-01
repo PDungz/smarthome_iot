@@ -7,6 +7,7 @@ import 'package:smarthome_iot/features/login/data/repositories/auth_repository.d
 import 'package:smarthome_iot/features/login/presentation/logic_holders/login_bloc/login_bloc.dart';
 import 'package:smarthome_iot/features/login/presentation/screens/widgets/login_button_session.dart';
 import 'package:smarthome_iot/features/login/presentation/screens/widgets/username_password_sesion.dart';
+import 'package:smarthome_iot/l10n/generated/app_localizations.dart';
 
 import 'widgets/loading_overlay.dart';
 
@@ -82,7 +83,7 @@ class _LoginRoutesState extends State<LoginRoutes> {
                                       const EdgeInsets.symmetric(vertical: 30),
                                   child: Center(
                                     child: Text(
-                                      "Login",
+                                      AppLocalizations.of(context)!.login,
                                       style: Theme.of(context)
                                           .textTheme
                                           .displayLarge

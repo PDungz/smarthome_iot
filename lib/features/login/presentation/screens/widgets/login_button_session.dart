@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../l10n/generated/app_localizations.dart';
+
 class LoginButtonSection extends StatelessWidget {
   final void Function()? onPressed;
   final bool isLoading;
@@ -16,9 +18,9 @@ class LoginButtonSection extends StatelessWidget {
         child: ElevatedButton(
             onPressed: onPressed,
             style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 12)),
-            child: const Text(
-              'Login',
+                padding: const EdgeInsets.symmetric(vertical: 16)),
+            child: Text(
+              AppLocalizations.of(context)!.login,
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 24,

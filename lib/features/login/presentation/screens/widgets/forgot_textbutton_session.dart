@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../l10n/generated/app_localizations.dart';
+
 class ForgotPasswordSection extends StatelessWidget {
   const ForgotPasswordSection({
     super.key,
@@ -11,10 +13,10 @@ class ForgotPasswordSection extends StatelessWidget {
       alignment: Alignment.centerRight,
       child: InkWell(
         onTap: () {},
-        child: const Padding(
+        child: Padding(
           padding: EdgeInsets.symmetric(vertical: 12),
           child: Text(
-            'Forgot password?',
+            '${AppLocalizations.of(context)!.forgot_password}?',
           ),
         ),
       ),

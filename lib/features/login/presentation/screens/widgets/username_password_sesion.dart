@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smarthome_iot/core/constants/colors/app_colors.dart';
 
+import '../../../../../l10n/generated/app_localizations.dart';
+
 class UsernamePasswordSesion extends StatefulWidget {
   final TextEditingController phoneNumberTexController;
   final TextEditingController passwordTextController;
@@ -31,8 +33,8 @@ class _UsernamePasswordSesionState extends State<UsernamePasswordSesion> {
       children: [
         TextFormField(
           controller: widget.phoneNumberTexController,
-          decoration: const InputDecoration(
-            hintText: "Phone Number",
+          decoration: InputDecoration(
+            hintText: AppLocalizations.of(context)!.phone_number,
             prefixIcon: Icon(Icons.phone),
           ),
           keyboardType: TextInputType.phone,
@@ -51,7 +53,7 @@ class _UsernamePasswordSesionState extends State<UsernamePasswordSesion> {
           controller: widget.passwordTextController,
           obscureText: onShowPassword,
           decoration: InputDecoration(
-            hintText: "Password",
+            hintText: AppLocalizations.of(context)!.password,
             prefixIcon: const Icon(Icons.lock),
             suffixIcon: onShowPassword
                 ? IconButton(
