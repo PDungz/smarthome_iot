@@ -92,6 +92,7 @@ class _EntryPointState extends State<EntryPoint> {
                         final String toDayTime =
                             DateUtil.formatFullDate(DateTime.now());
                         return HeaderSession(
+                          userId: state.user.id,
                           fullName: fullName,
                           toDayTime: toDayTime,
                         );

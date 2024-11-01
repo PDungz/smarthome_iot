@@ -3,6 +3,8 @@ import 'package:smarthome_iot/core/constants/colors/app_colors.dart';
 import 'package:smarthome_iot/core/constants/icons/app_icons.dart';
 import 'package:smarthome_iot/features/entry_point/presentation/view/bottom_app_bar_item.dart';
 
+import '../../../../l10n/generated/app_localizations.dart';
+
 class AppNavigationBar extends StatelessWidget {
   final int currentIndex;
   final void Function(int) onNavTap;
@@ -32,7 +34,10 @@ class AppNavigationBar extends StatelessWidget {
                 )
               : const SizedBox(),
           BottomAppBarItem(
-            name: "Home        ",
+            name: AppLocalizations.of(context)!.local_language ==
+                    "AppLocalizations.of(context)!.home"
+                ? "Home        "
+                : AppLocalizations.of(context)!.home,
             isAction: currentIndex == 0,
             iconLocationRegular: AppIcons.home_regular,
             iconLocationSolid: AppIcons.home_solid,
@@ -52,7 +57,7 @@ class AppNavigationBar extends StatelessWidget {
                 )
               : const SizedBox(),
           BottomAppBarItem(
-            name: "Add",
+            name: AppLocalizations.of(context)!.add,
             isAction: currentIndex == 1,
             iconLocationRegular: AppIcons.plus_regular,
             iconLocationSolid: AppIcons.plus_solid_round,
@@ -72,7 +77,7 @@ class AppNavigationBar extends StatelessWidget {
                 )
               : const SizedBox(),
           BottomAppBarItem(
-            name: "Notification",
+            name: AppLocalizations.of(context)!.notification,
             isAction: currentIndex == 2,
             iconLocationRegular: AppIcons.notification_regular,
             iconLocationSolid: AppIcons.notification_solid,

@@ -5,10 +5,12 @@ import '../../../../core/constants/colors/app_colors.dart';
 import '../../../../core/routes/app_routes.dart';
 
 class HeaderSession extends StatelessWidget {
+  final String userId;
   final String fullName;
   final String toDayTime;
   const HeaderSession({
     super.key,
+    required this.userId,
     required this.fullName,
     required this.toDayTime,
   });
@@ -19,7 +21,8 @@ class HeaderSession extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         InkWell(
-          onTap: () => Navigator.pushNamed(context, AppRoutes.profile),
+          onTap: () => Navigator.pushNamed(context, AppRoutes.profile,
+              arguments: userId),
           child: Container(
             height: 56,
             width: 56,
@@ -35,7 +38,8 @@ class HeaderSession extends StatelessWidget {
         // Use Expanded to prevent overflow
         Expanded(
           child: InkWell(
-            onTap: () => Navigator.pushNamed(context, AppRoutes.profile),
+            onTap: () => Navigator.pushNamed(context, AppRoutes.profile,
+                arguments: userId),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
