@@ -6,6 +6,8 @@ import 'package:smarthome_iot/features/room/data/repositories/room_repository_im
 import 'package:smarthome_iot/features/room/presentation/logic_holder/bloc_room/room_bloc.dart';
 import 'package:smarthome_iot/features/room/presentation/views/text_field_form_room_session.dart';
 import '../../../core/enums/status_state.dart';
+import '../../../core/routes/app_routes.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../domain/entities/room.dart';
 
 class UpdateRoomRoutes extends StatefulWidget {
@@ -30,7 +32,6 @@ class _UpdateRoomRoutesState extends State<UpdateRoomRoutes> {
 
   @override
   Widget build(BuildContext context) {
-    print("Room Id: ${widget.roomId}");
     return BlocProvider<RoomBloc>(
       create: (context) =>
           RoomBloc(RoomRepositoryImpl(remoteDatasource: getIt()))
@@ -78,7 +79,7 @@ class _UpdateRoomRoutesState extends State<UpdateRoomRoutes> {
                       children: [
                         const SizedBox(height: 20),
                         Text(
-                          "Update Room",
+                          AppLocalizations.of(context)!.update_room,
                           style: Theme.of(context)
                               .textTheme
                               .headlineLarge
@@ -112,7 +113,7 @@ class _UpdateRoomRoutesState extends State<UpdateRoomRoutes> {
                                 );
                               }
                             },
-                            child: const Text("Update"),
+                            child: Text(AppLocalizations.of(context)!.update),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -152,9 +153,11 @@ class _UpdateRoomRoutesState extends State<UpdateRoomRoutes> {
           actions: [
             TextButton(
               child: const Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
+              onPressed: () => Navigator.pushNamed(
+                context,
+                AppRoutes.entry_point,
+                arguments: [3, ""],
+              ),
             ),
           ],
         );

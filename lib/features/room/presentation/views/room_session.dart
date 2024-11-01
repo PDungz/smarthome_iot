@@ -5,6 +5,7 @@ import 'package:smarthome_iot/core/routes/app_routes.dart';
 import 'package:smarthome_iot/features/room/domain/entities/room.dart';
 import '../../../../core/constants/colors/app_colors.dart';
 import '../../../../core/constants/icons/app_icons.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../logic_holder/bloc_room/room_bloc.dart';
 
 class RoomSession extends StatefulWidget {
@@ -120,8 +121,9 @@ class _RoomSessionState extends State<RoomSession> {
                             children: [
                               SvgPicture.asset(
                                   AppIcons.screwdriver_wrench_solid),
+                              const SizedBox(width: 8),
                               Text(
-                                "Update",
+                                AppLocalizations.of(context)!.update,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge
@@ -152,8 +154,9 @@ class _RoomSessionState extends State<RoomSession> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               SvgPicture.asset(AppIcons.trash_can_solid),
+                              const SizedBox(width: 8),
                               Text(
-                                "Delete",
+                                AppLocalizations.of(context)!.delete,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge

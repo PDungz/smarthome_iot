@@ -7,6 +7,7 @@ import 'package:smarthome_iot/features/room/presentation/logic_holder/bloc_room/
 import 'package:smarthome_iot/features/room/presentation/views/text_field_form_room_session.dart';
 import '../../../core/enums/status_state.dart';
 import '../../../core/routes/app_routes.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../domain/entities/room.dart';
 
 class AddRoomRoutes extends StatefulWidget {
@@ -67,7 +68,7 @@ class _AddRoomRoutesState extends State<AddRoomRoutes> {
                     children: [
                       const SizedBox(height: 20),
                       Text(
-                        "Add Room",
+                        AppLocalizations.of(context)!.add_room,
                         style:
                             Theme.of(context).textTheme.headlineLarge?.copyWith(
                                   fontWeight: FontWeight.bold,
@@ -98,7 +99,7 @@ class _AddRoomRoutesState extends State<AddRoomRoutes> {
                               );
                             }
                           },
-                          child: const Text("Add"),
+                          child: Text(AppLocalizations.of(context)!.add),
                         ),
                       ),
                       const SizedBox(height: 20),
