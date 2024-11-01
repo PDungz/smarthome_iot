@@ -4,6 +4,7 @@ import 'package:smarthome_iot/core/routes/app_routes.dart';
 import 'package:smarthome_iot/core/services/logger_service.dart';
 import '../../../../core/constants/colors/app_colors.dart';
 import '../../../../core/constants/icons/app_icons.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 class DeviceSession extends StatefulWidget {
   final String id;
@@ -134,16 +135,19 @@ class _DeviceSessionState extends State<DeviceSession> {
                           context, AppRoutes.entry_point,
                           arguments: [7, widget.id]),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SvgPicture.asset(AppIcons.screwdriver_wrench_solid),
+                          SizedBox(width: 8),
                           Text(
-                            "Update",
-                            style:
-                                Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.textPrimaryColor,
-                                    ),
+                            AppLocalizations.of(context)!.update,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.textPrimaryColor,
+                                ),
                           ),
                         ],
                       ),
@@ -161,16 +165,19 @@ class _DeviceSessionState extends State<DeviceSession> {
                         printE(widget.id);
                       },
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SvgPicture.asset(AppIcons.trash_can_solid),
+                          SizedBox(width: 8),
                           Text(
-                            "Delete",
-                            style:
-                                Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.textPrimaryColor,
-                                    ),
+                            AppLocalizations.of(context)!.delete,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.textPrimaryColor,
+                                ),
                           ),
                         ],
                       ),
