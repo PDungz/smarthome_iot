@@ -1,6 +1,11 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smarthome_iot/core/apis/dio_client.dart';
+import 'package:smarthome_iot/core/common/global_setting/data/datasources/global_info_local_data_source.dart';
+import 'package:smarthome_iot/core/common/global_setting/data/repostitories/global_repository_impl.dart';
+import 'package:smarthome_iot/core/common/global_setting/domain/repositories/global_repository.dart';
+import 'package:smarthome_iot/core/common/global_setting/domain/usecase/global_info_usecases.dart';
 import 'package:smarthome_iot/features/device/data/data_source/device_remote_datasource.dart';
 import 'package:smarthome_iot/features/room/data/datasource/room_remote_datasource.dart';
 import 'package:smarthome_iot/features/device/data/repositories/device_repository_impl.dart';
@@ -23,6 +28,10 @@ import '../../features/entry_point/domain/repositories/user_repository.dart';
 final getIt = GetIt.instance;
 
 Future<void> init() async {
+  //! Flutter SharedPreferences
+  final sharePreference = await SharedPreferences.getInstance();
+  getIt.registerLazySingleton<SharedPreferences>(() => sharePreference);
+
   //! Flutter Secure Storage
   getIt.registerLazySingleton<FlutterSecureStorage>(
       () => const FlutterSecureStorage());
@@ -32,6 +41,9 @@ Future<void> init() async {
       () => DioClient(tokenRepository: getIt()));
 
   //! Remote Data Source
+  getIt.registerLazySingleton<GlobalInfoLocalDataSource>(
+    () => GlobalInfoLocalDataSourceImpl(sharedPreferences: getIt()),
+  );
   // Auth
   getIt.registerLazySingleton<AuthRemoteDatasource>(
     () => AuthRemoteDatasourceImpl(dio: getIt<DioClient>().externalDio),
@@ -68,6 +80,9 @@ Future<void> init() async {
   );
 
   //! Repository
+  getIt.registerLazySingleton<GlobalRepository>(
+      () => GlobalRepositoryImpl(globalInfoLocalDataSource: getIt()));
+
   getIt.registerLazySingleton<TokenRepository>(
     () => StorageTokenRepository(secureStorage: getIt<FlutterSecureStorage>()),
   );
@@ -93,4 +108,8 @@ Future<void> init() async {
     () => NotificationActionRepositoryImpl(
         notificationActionRemoteDatasource: getIt()),
   );
+
+  //! Usecase
+  getIt.registerSingleton<GlobalInfoUsecases>(
+      GlobalInfoUsecases(globalRepository: getIt()));
 }

@@ -67,7 +67,11 @@ class AppGenerateRoutes {
 
       // Setting
       case AppRoutes.profile:
-        return CupertinoPageRoute(builder: (_) => const ProfileRoutes());
+        final userId = settings.arguments as String;
+        return CupertinoPageRoute(
+            builder: (_) => ProfileRoutes(
+                  userId: userId,
+                ));
 
       // Setting
       case AppRoutes.setting:
