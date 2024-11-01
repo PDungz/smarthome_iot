@@ -10,6 +10,8 @@ import 'package:smarthome_iot/features/notification/presentation/logic_bloc/bloc
 import 'package:smarthome_iot/features/notification/presentation/view/notification_session.dart';
 import 'package:smarthome_iot/features/notification/presentation/view/notification_session_loading.dart';
 
+import '../../../l10n/generated/app_localizations.dart';
+
 class NotificationRoutes extends StatefulWidget {
   const NotificationRoutes({super.key});
 
@@ -49,8 +51,8 @@ class _NotificationRoutesState extends State<NotificationRoutes> {
               // Search Bar
               TextFormField(
                 controller: searchTextController,
-                decoration: const InputDecoration(
-                  hintText: "Searching",
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context)!.searching,
                   prefixIcon: Icon(
                     Icons.search,
                     color: AppColors.iconSecondarColor,
