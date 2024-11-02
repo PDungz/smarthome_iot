@@ -34,8 +34,7 @@ class AppNavigationBar extends StatelessWidget {
                 )
               : const SizedBox(),
           BottomAppBarItem(
-            name: AppLocalizations.of(context)!.local_language ==
-                    "AppLocalizations.of(context)!.home"
+            name: AppLocalizations.of(context)!.local_language == "English"
                 ? "Home        "
                 : AppLocalizations.of(context)!.home,
             isAction: currentIndex == 0,
