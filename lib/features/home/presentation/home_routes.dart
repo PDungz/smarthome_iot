@@ -5,9 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome_iot/core/constants/icons/app_icons.dart';
 import 'package:smarthome_iot/core/services/injection_container.dart';
 import 'package:smarthome_iot/features/device/data/repositories/device_repository_impl.dart';
-import 'package:smarthome_iot/features/entry_point/data/repository/user_repository_impl.dart';
-import 'package:smarthome_iot/features/home/presentation/logic_holder/bloc/websocket_bloc.dart';
 import 'package:smarthome_iot/features/home/presentation/view/temp_hum_gas_session.dart';
+import 'package:smarthome_iot/features/home/presentation/view/temp_hum_gas_session_loading.dart';
 import 'package:smarthome_iot/features/room/data/repositories/room_repository_impl.dart';
 import 'package:smarthome_iot/features/device/presentation/logic_holder/bloc_device/device_bloc.dart';
 import 'package:smarthome_iot/features/room/presentation/logic_holder/bloc_room/room_bloc.dart';
@@ -157,9 +156,7 @@ class _HomeRoutesState extends State<HomeRoutes> {
                 child: BlocBuilder<UserBloc, UserState>(
                   builder: (context, state) {
                     if (state is UserLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return const TempHumGasSessionLoading();
                     } else if (state is UserLoaded) {
                       _initializeWebSocket(state.user.id);
                       return TempHumGasSession(
