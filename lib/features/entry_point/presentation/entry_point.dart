@@ -16,7 +16,7 @@ import 'package:smarthome_iot/features/room/presentation/add_room_routes.dart';
 import 'package:smarthome_iot/features/room/presentation/update_room_routes.dart';
 import 'package:smarthome_iot/features/room/presentation/view_room_routes.dart';
 import 'package:smarthome_iot/features/setting/presentation/logic_holder/user_bloc/user_bloc.dart';
-import '../../../core/services/websocket_service.dart';
+// import '../../../core/services/websocket_service.dart';
 import '../../../core/utils/format_date_util.dart';
 import '../data/repository/user_repository_impl.dart';
 
@@ -34,7 +34,7 @@ class EntryPoint extends StatefulWidget {
 }
 
 class _EntryPointState extends State<EntryPoint> {
-  final webSocketService = WebSocketService();
+  // final webSocketService = WebSocketService();
   int _currentIndex = 0;
 
   // Danh sách các trang
@@ -87,7 +87,7 @@ class _EntryPointState extends State<EntryPoint> {
                       if (state is UserLoading) {
                         return const HeaderSessionnLoading();
                       } else if (state is UserLoaded) {
-                        webSocketService.connect(state.user.id);
+                        // webSocketService.connect(state.user.id);
                         final String fullName = state.user.fullName;
                         final String toDayTime =
                             DateUtil.formatFullDate(DateTime.now());
