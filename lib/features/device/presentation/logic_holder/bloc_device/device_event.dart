@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'device_bloc.dart';
 
 abstract class DeviceEvent extends Equatable {
@@ -19,10 +20,14 @@ class LoadDevice extends DeviceEvent {
 }
 
 class UpdateDevice extends DeviceEvent {
+  final String esp_ip;
   final Device device;
 
-  const UpdateDevice({required this.device});
+  const UpdateDevice({
+    required this.esp_ip,
+    required this.device,
+  });
 
   @override
-  List<Object> get props => [device];
+  List<Object> get props => [device, esp_ip];
 }

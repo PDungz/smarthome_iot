@@ -80,7 +80,7 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
             event.device.type,
             event.device.state,
             event.device.gate,
-            event.device.id,
+            event.esp_ip,
           ); // Truyền các tham số cần thiết
           emit(DevicesLoaded(devices: updatedDevices));
         }
