@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:smarthome_iot/core/constants/colors/app_colors.dart';
-import 'package:smarthome_iot/core/constants/icons/app_icons.dart';
 
-class TemperatureSession extends StatelessWidget {
+class WeatherSession extends StatelessWidget {
   final String temperature;
   final String humidity;
-  const TemperatureSession(
+  const WeatherSession(
       {super.key, required this.temperature, required this.humidity});
 
   @override
@@ -98,95 +96,6 @@ class TemperatureSession extends StatelessWidget {
               ),
             ],
           ),
-        ),
-        const SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width / 3.6,
-              height: 56,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              decoration: ShapeDecoration(
-                color: AppColors.backgroundColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    AppIcons.temperature_solid,
-                    height: 24,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    "100°C",
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width / 3.6,
-              height: 56,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              decoration: ShapeDecoration(
-                color: AppColors.backgroundColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    AppIcons.droplet_solid,
-                    color: Colors.blue[200],
-                    height: 24,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    "100%",
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width / 3.6,
-              height: 56,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              decoration: ShapeDecoration(
-                color: AppColors.backgroundColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    AppIcons.fire_solid,
-                    color: Colors.red[200],
-                    height: 24,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    "100",
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ],
-              ),
-            )
-          ],
         ),
       ],
     );

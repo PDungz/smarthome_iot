@@ -138,7 +138,7 @@ class _DeviceSessionState extends State<DeviceSession> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SvgPicture.asset(AppIcons.screwdriver_wrench_solid),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Text(
                             AppLocalizations.of(context)!.update,
                             style: Theme.of(context)
@@ -168,7 +168,7 @@ class _DeviceSessionState extends State<DeviceSession> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SvgPicture.asset(AppIcons.trash_can_solid),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Text(
                             AppLocalizations.of(context)!.delete,
                             style: Theme.of(context)

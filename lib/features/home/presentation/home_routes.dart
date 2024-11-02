@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome_iot/core/constants/icons/app_icons.dart';
 import 'package:smarthome_iot/core/services/injection_container.dart';
 import 'package:smarthome_iot/features/device/data/repositories/device_repository_impl.dart';
+import 'package:smarthome_iot/features/entry_point/data/repository/user_repository_impl.dart';
+import 'package:smarthome_iot/features/home/presentation/logic_holder/bloc/websocket_bloc.dart';
+import 'package:smarthome_iot/features/home/presentation/view/temp_hum_gas_session.dart';
 import 'package:smarthome_iot/features/room/data/repositories/room_repository_impl.dart';
 import 'package:smarthome_iot/features/device/presentation/logic_holder/bloc_device/device_bloc.dart';
 import 'package:smarthome_iot/features/room/presentation/logic_holder/bloc_room/room_bloc.dart';
@@ -10,8 +15,10 @@ import 'package:smarthome_iot/features/home/presentation/view/device_session.dar
 import 'package:smarthome_iot/features/home/presentation/view/device_session_loading.dart';
 import 'package:smarthome_iot/features/home/presentation/view/rooms_session_loading.dart';
 import 'package:smarthome_iot/features/home/presentation/view/rooms_session.dart';
-import 'package:smarthome_iot/features/home/presentation/view/temperature_session.dart';
+import 'package:smarthome_iot/features/home/presentation/view/weather_session.dart';
+import 'package:smarthome_iot/features/setting/presentation/logic_holder/user_bloc/user_bloc.dart';
 
+import '../../../core/services/logger_service.dart';
 import '../../../core/services/websocket_service.dart';
 import '../../device/domain/entities/device.dart';
 
@@ -25,12 +32,20 @@ class HomeRoutes extends StatefulWidget {
 class _HomeRoutesState extends State<HomeRoutes> {
   String temperature = "";
   String humidity = "";
-  final webSocketService = WebSocketService();
+  late WebSocketService webSocketService;
   late String roomId = ""; // Khởi tạo roomId
+  Map<String, dynamic> responseWebSocket = {};
+  late String esp_ip = "";
+
+  double currentGasValue = 0;
+  double currentHumidity = 0;
+  double currentTemperature = 0;
 
   @override
   void initState() {
     super.initState();
+    webSocketService = WebSocketService();
+    // _initializeWebSocket();
   }
 
   void _onRoomSelected(String selectedRoomId) {
@@ -42,6 +57,43 @@ class _HomeRoutesState extends State<HomeRoutes> {
 
   void _toggleDevice(bool value, Device device) {
     // Thêm logic để bật/tắt thiết bị
+  }
+  void _initializeWebSocket(String userId) {
+    webSocketService.connect(userId);
+    webSocketService.stream.listen((event) {
+      final newResponse = jsonDecode(event)['data'];
+
+      // esp_ip ??= newResponse['ip'];
+      // printE("WebSocket Response: $newResponse");
+      // printS(
+      //     "WebSocket Response: ${newResponse['gas_value']} -- ${newResponse['humidity']} -- ${newResponse['temperature']}");
+
+      // Sử dụng toán tử ?? để xử lý giá trị null và gán giá trị mặc định nếu cần
+      double newGasValue =
+          (newResponse['gas_value'] as num?)?.toDouble() ?? currentGasValue;
+      double newHumidity =
+          (newResponse['humidity'] as num?)?.toDouble() ?? currentHumidity;
+      double newTemperature =
+          (newResponse['temperature'] as num?)?.toDouble() ??
+              currentTemperature;
+
+      // Kiểm tra sự khác biệt giữa các giá trị hiện tại và giá trị mới
+      if (currentGasValue != newGasValue ||
+          currentHumidity != newHumidity ||
+          currentTemperature != newTemperature) {
+        // printE("WebSocket Response -------: $responseWebSocket");
+
+        setState(() {
+          // Cập nhật giá trị nếu có sự thay đổi
+          esp_ip = newResponse['ip'];
+          currentGasValue = newGasValue;
+          currentHumidity = newHumidity;
+          currentTemperature = newTemperature;
+          responseWebSocket = newResponse; // Cập nhật WebSocket response
+          printE("WebSocket Response -------: $responseWebSocket");
+        });
+      }
+    });
   }
 
   @override
@@ -65,6 +117,16 @@ class _HomeRoutesState extends State<HomeRoutes> {
               getIt())
             ..add(LoadDevice(roomId: roomId)),
         ),
+        // BlocProvider<WebsocketBloc>(
+        //   create: (context) => WebsocketBloc(
+        //       UserRepositoryImpl(userRemoteDataSource: getIt()),
+        //       webSocketService)
+        //     ..add(SensorDataWebsocket()),
+        // )
+        // BlocProvider<UserBloc>(
+        //   create: (context) =>
+        //       UserBloc(UserRepositoryImpl(userRemoteDataSource: getIt())),
+        // )
       ],
       child: Scaffold(
         body: Padding(
@@ -74,8 +136,39 @@ class _HomeRoutesState extends State<HomeRoutes> {
             slivers: [
               const SliverToBoxAdapter(child: SizedBox(height: 10)),
               const SliverToBoxAdapter(
-                  child: TemperatureSession(
-                      temperature: "100°C", humidity: "100%")),
+                  child:
+                      WeatherSession(temperature: "100°C", humidity: "100%")),
+              // SliverToBoxAdapter(
+              //     child: BlocBuilder<WebsocketBloc, WebsocketState>(
+              //   builder: (context, state) {
+              //     if (state is WebsocketLoading) {
+              //       return const Center(
+              //         child: CircularProgressIndicator(),
+              //       );
+              //     } else if (state is SensorDataLoaded) {
+              //       return TempHumGasSession(
+              //         responseWebSocket: responseWebSocket,
+              //       );
+              //     }
+              //     return const SizedBox();
+              //   },
+              // )),
+              SliverToBoxAdapter(
+                child: BlocBuilder<UserBloc, UserState>(
+                  builder: (context, state) {
+                    if (state is UserLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is UserLoaded) {
+                      _initializeWebSocket(state.user.id);
+                      return TempHumGasSession(
+                          responseWebSocket: responseWebSocket);
+                    }
+                    return const SizedBox();
+                  },
+                ),
+              ),
               const SliverToBoxAdapter(child: SizedBox(height: 4)),
               // Hiển thị danh sách phòng
               SliverToBoxAdapter(
@@ -157,9 +250,8 @@ class _HomeRoutesState extends State<HomeRoutes> {
                                     ? 'ON'
                                     : 'OFF', // Toggle giữa ON và OFF
                               );
-                              context
-                                  .read<DeviceBloc>()
-                                  .add(UpdateDevice(device: updatedDevice));
+                              context.read<DeviceBloc>().add(UpdateDevice(
+                                  device: updatedDevice, esp_ip: esp_ip));
                             },
                           );
                         },
