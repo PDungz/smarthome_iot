@@ -25,7 +25,7 @@ class WebSocketService {
       "device": "android", // Loại thiết bị
       "userID": userID // ID người dùng
     };
-    printI("RegisterData: $registerData");
+    printE("RegisterData: ${jsonEncode(registerData)}");
     _sendData(registerData);
   }
 
@@ -39,7 +39,7 @@ class WebSocketService {
       "gate": gate,
       "ip": ip
     };
-    printI("RegisterData: $controlData");
+    printI("RegisterData: ${jsonEncode(controlData)}");
     _sendData(controlData);
   }
 
