@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'package:smarthome_iot/core/services/logger_service.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../utils/dot_env_util.dart';
+
 class WebSocketService {
   static final WebSocketService _instance = WebSocketService._internal();
   factory WebSocketService() => _instance;
 
   late WebSocketChannel _channel; // Kênh WebSocket
-  final String _url = 'wss://iot-ike5.onrender.com'; // URL của WebSocket server
+  final String _url = DotEnvUtil
+      .websocketVersion; // URL của WebSocket server // URL của WebSocket server
 
   // Constructor riêng tư
   WebSocketService._internal();
