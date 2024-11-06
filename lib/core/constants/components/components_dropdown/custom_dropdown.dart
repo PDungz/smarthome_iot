@@ -29,9 +29,18 @@ class CustomDropdown<T> extends StatelessWidget {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<T>(
           value: selectedItem,
-          hint: Text(hintText),
+          hint: Text(
+            hintText,
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge
+                ?.copyWith(color: AppColors.textSecondarColor),
+          ),
           isExpanded: true,
-          icon: const Icon(Icons.arrow_drop_down),
+          icon: const Icon(
+            Icons.arrow_drop_down,
+            color: AppColors.iconSecondarColor,
+          ),
           onChanged: onChanged,
           items: items.map((T item) {
             return DropdownMenuItem<T>(
