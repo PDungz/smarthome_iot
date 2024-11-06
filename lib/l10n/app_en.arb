@@ -6,9 +6,7 @@
   "password": "Password",
   "language": "Language",
   "forgot_password": "Forgot password",
-  
   "home": "Home",
-  
   "add": "Add",
   "room": "Room",
   "device": "Device",
@@ -19,16 +17,14 @@
   "add_room": "Add Room",
   "description": "Description",
   "add_device": "Add Device",
+  "update_device": "Update Device",
   "name": "Name",
   "type": "Type",
   "gate": "Gate",
-  
   "notification": "Notification",
   "searching": "Searching",
-  
   "temperature": "Temperature",
   "humidity": "Humidity",
-  
   "setting": "Setting",
   "information": "Information",
   "full_name": "Full Name",

@@ -195,6 +195,12 @@ abstract class AppLocalizations {
   /// **'Add Device'**
   String get add_device;
 
+  /// No description provided for @update_device.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Device'**
+  String get update_device;
+
   /// No description provided for @name.
   ///
   /// In en, this message translates to:

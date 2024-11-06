@@ -6,9 +6,7 @@
   "password": "Mật khẩu",
   "language": "Ngôn ngữ",
   "forgot_password": "Quên mật khẩu",
-  
   "home": "Trang chủ",
-  
   "add": "Thêm",
   "room": "Phòng",
   "device": "Thiết bị",
@@ -19,16 +17,14 @@
   "add_room": "Thêm Phòng",
   "description": "Mô tả",
   "add_device": "Thêm Thiết bị",
+  "update_device": "Cập nhật Thiết bị",
   "name": "Tên",
   "type": "Loại",
   "gate": "Cổng",
-  
   "notification": "Thông báo",
   "searching": "Tìm kiếm",
-  
   "temperature": "Nhiệt độ",
   "humidity": "Độ ẩm",
-  
   "setting": "Cài đặt",
   "information": "Thông tin",
   "full_name": "Họ và tên",

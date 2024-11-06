@@ -56,6 +56,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get add_device => 'Thêm Thiết bị';
 
   @override
+  String get update_device => 'Cập nhật Thiết bị';
+
+  @override
   String get name => 'Tên';
 
   @override

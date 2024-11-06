@@ -56,6 +56,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get add_device => 'Add Device';
 
   @override
+  String get update_device => 'Update Device';
+
+  @override
   String get name => 'Name';
 
   @override
