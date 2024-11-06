@@ -17,9 +17,13 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
 
   DeviceBloc(this.deviceRepository, this.webSocketService, this.roomRepository)
       : super(DeviceLoading()) {
-    on<LoadDevice>(_onLoadDevicesByRoomId);
+    on<LoadDeviceByRoomId>(_onLoadDevicesByRoomId);
+    on<LoadDeviceById>(_onLoadDeviceById);
     on<UpdateDevice>(_onUpdateDevice);
     on<LoadDevices>(_onLoadDevices);
+    on<PostDevice>(_onPostDevice);
+    on<PutDevice>(_onPutDevice);
+    on<DeleteDevice>(_onDeleteDevice);
   }
 
   Future<void> _onLoadDevices(
@@ -30,12 +34,24 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
       final devices = await deviceRepository.getDevices();
       emit(DevicesLoaded(devices: devices ?? []));
     } catch (e) {
-      emit(DeviceError(Msg: e.toString()));
+      emit(DeviceError(message: e.toString()));
+    }
+  }
+
+  Future<void> _onLoadDeviceById(
+      LoadDeviceById event, Emitter<DeviceState> emit) async {
+    emit(DeviceLoading());
+
+    try {
+      final device = await deviceRepository.getDeviceById(event.deviceId!);
+      emit(DeviceLoaded(device: device!));
+    } catch (e) {
+      emit(DeviceError(message: e.toString()));
     }
   }
 
   Future<void> _onLoadDevicesByRoomId(
-      LoadDevice event, Emitter<DeviceState> emit) async {
+      LoadDeviceByRoomId event, Emitter<DeviceState> emit) async {
     emit(DeviceLoading());
 
     List<Device>? devices = []; // Khởi tạo biến devices ở đây
@@ -48,7 +64,8 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
           devices = await deviceRepository.getDevicesByRoomId(roomId);
         } else {
           emit(const DeviceError(
-              Msg: "No rooms available")); // Thông báo lỗi nếu không có phòng
+              message:
+                  "No rooms available")); // Thông báo lỗi nếu không có phòng
           return; // Dừng xử lý nếu không có phòng
         }
       } else {
@@ -57,7 +74,7 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
       emit(DevicesLoaded(devices: devices ?? []));
     } catch (e) {
       print("Error loading devices: $e"); // Log lỗi chi tiết
-      emit(DeviceError(Msg: e.toString()));
+      emit(DeviceError(message: e.toString()));
     }
   }
 
@@ -80,21 +97,73 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
             event.device.type,
             event.device.state,
             event.device.gate,
-            event.esp_ip,
+            event.accessKey,
           ); // Truyền các tham số cần thiết
           emit(DevicesLoaded(devices: updatedDevices));
         }
 
         // Phát lại sự kiện LoadDevice để tải lại danh sách thiết bị
-        add(LoadDevice(roomId: event.device.roomID));
+        add(LoadDeviceByRoomId(roomId: event.device.roomID));
         emit(const DeviceUpdated(
-            state: StatusState.success, Msg: 'Cập nhật thành công'));
+            state: StatusState.success, message: 'Cập nhật thành công'));
       } else {
         emit(const DeviceUpdated(
-            state: StatusState.failure, Msg: 'Cập nhật thất bại'));
+            state: StatusState.failure, message: 'Cập nhật thất bại'));
       }
     } catch (e) {
-      emit(DeviceUpdated(state: StatusState.failure, Msg: e.toString()));
+      emit(DeviceUpdated(state: StatusState.failure, message: e.toString()));
+    }
+  }
+
+  Future<void> _onPostDevice(
+      PostDevice event, Emitter<DeviceState> emit) async {
+    try {
+      final success = await deviceRepository.postDevice(event.device);
+      if (success) {
+        emit(const DevicePostSuccess(
+            state: StatusState.success, message: "Device added successfully"));
+      } else {
+        emit(const DevicePostSuccess(
+            state: StatusState.failure, message: "Failed to add device"));
+      }
+    } catch (e) {
+      emit(DevicePostSuccess(
+          state: StatusState.failure, message: "Error: ${e.toString()}"));
+    }
+  }
+
+  Future<void> _onPutDevice(PutDevice event, Emitter<DeviceState> emit) async {
+    try {
+      final success = await deviceRepository.putDevice(event.device);
+      if (success) {
+        emit(const DevicePutSuccess(
+            state: StatusState.success,
+            message: "Device updated successfully"));
+      } else {
+        emit(const DevicePutSuccess(
+            state: StatusState.failure, message: "Failed to update device"));
+      }
+    } catch (e) {
+      emit(DevicePutSuccess(
+          state: StatusState.failure, message: "Error: ${e.toString()}"));
+    }
+  }
+
+  Future<void> _onDeleteDevice(
+      DeleteDevice event, Emitter<DeviceState> emit) async {
+    try {
+      final success = await deviceRepository.deleteDevice(event.deviceId);
+      if (success) {
+        emit(const DeviceDeleted(
+            state: StatusState.success,
+            message: "Device deleted successfully"));
+      } else {
+        emit(const DeviceDeleted(
+            state: StatusState.failure, message: "Failed to delete device"));
+      }
+    } catch (e) {
+      emit(DeviceDeleted(
+          state: StatusState.failure, message: "Error: ${e.toString()}"));
     }
   }
 }

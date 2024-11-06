@@ -10,24 +10,66 @@ abstract class DeviceEvent extends Equatable {
 
 class LoadDevices extends DeviceEvent {}
 
-class LoadDevice extends DeviceEvent {
+class LoadDeviceById extends DeviceEvent {
+  final String? deviceId;
+
+  const LoadDeviceById({this.deviceId});
+
+  @override
+  List<Object> get props => [deviceId ?? ""];
+}
+
+class LoadDeviceByRoomId extends DeviceEvent {
   final String? roomId;
 
-  const LoadDevice({this.roomId});
+  const LoadDeviceByRoomId({this.roomId});
 
   @override
   List<Object> get props => [roomId ?? ""];
 }
 
 class UpdateDevice extends DeviceEvent {
-  final String esp_ip;
+  final String accessKey;
   final Device device;
 
   const UpdateDevice({
-    required this.esp_ip,
+    required this.accessKey,
     required this.device,
   });
 
   @override
-  List<Object> get props => [device, esp_ip];
+  List<Object> get props => [accessKey, device];
+}
+
+class PostDevice extends DeviceEvent {
+  final Device device;
+
+  const PostDevice({
+    required this.device,
+  });
+
+  @override
+  List<Object> get props => [device];
+}
+
+class PutDevice extends DeviceEvent {
+  final Device device;
+
+  const PutDevice({
+    required this.device,
+  });
+
+  @override
+  List<Object> get props => [device];
+}
+
+class DeleteDevice extends DeviceEvent {
+  final String deviceId;
+
+  const DeleteDevice({
+    required this.deviceId,
+  });
+
+  @override
+  List<Object> get props => [deviceId];
 }

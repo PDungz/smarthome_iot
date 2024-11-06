@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:smarthome_iot/core/routes/app_routes.dart';
+import 'package:smarthome_iot/features/device/presentation/logic_holder/bloc_device/device_bloc.dart';
 import '../../../../core/constants/colors/app_colors.dart';
 import '../../../../core/constants/icons/app_icons.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../domain/entities/device.dart';
 
 class DeviceSession extends StatefulWidget {
@@ -112,14 +115,15 @@ class _DeviceSessionState extends State<DeviceSession> {
                           ),
                           onPressed: () => Navigator.pushNamed(
                               context, AppRoutes.entry_point,
-                              arguments: [5, widget.device.id]),
+                              arguments: [8, widget.device.id]),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               SvgPicture.asset(
                                   AppIcons.screwdriver_wrench_solid),
+                              const SizedBox(width: 8),
                               Text(
-                                "Update",
+                                AppLocalizations.of(context)!.update,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge
@@ -141,13 +145,18 @@ class _DeviceSessionState extends State<DeviceSession> {
                             backgroundColor: AppColors
                                 .buttonDeleteColor, // Set background color
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            context
+                                .read<DeviceBloc>()
+                                .add(DeleteDevice(deviceId: widget.device.id));
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               SvgPicture.asset(AppIcons.trash_can_solid),
+                              const SizedBox(width: 8),
                               Text(
-                                "Delete",
+                                AppLocalizations.of(context)!.delete,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge

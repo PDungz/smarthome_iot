@@ -16,6 +16,11 @@ class DeviceRepositoryImpl implements DeviceRepository {
   }
 
   @override
+  Future<bool> postDevice(Device device) async {
+    return await remoteDatasource.postDevice(device);
+  }
+
+  @override
   Future<List<Device>?> getDevicesByRoomId(String roomId) async {
     return await remoteDatasource.getDevicesByRoomId(roomId);
   }
@@ -23,5 +28,15 @@ class DeviceRepositoryImpl implements DeviceRepository {
   @override
   Future<bool> putDevice(Device device) async {
     return await remoteDatasource.putDevice(device);
+  }
+
+  @override
+  Future<bool> deleteDevice(String deviceId) async {
+    return await remoteDatasource.deleteDevice(deviceId);
+  }
+
+  @override
+  Future<Device?> getDeviceById(String deviceId) async {
+    return await remoteDatasource.getDeviceById(deviceId);
   }
 }

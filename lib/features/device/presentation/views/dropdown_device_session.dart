@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:smarthome_iot/features/room/domain/entities/room.dart';
 import '../../../../core/constants/colors/app_colors.dart';
 import '../../../../core/constants/components/components_dropdown/custom_dropdown.dart';
 
-class DropdownDeviceSession extends StatelessWidget {
-  final String? selectedRoomId;
-  final List<Room> rooms;
+class DropdownDeviceSession<T> extends StatelessWidget {
+  final String title;
+  final String? selectedId;
+  final String hintText;
+  final List<T> items;
   final ValueChanged<String?> onChanged;
+  final String Function(T) getId;
+  final String Function(T) getName;
 
   const DropdownDeviceSession({
     super.key,
-    required this.selectedRoomId,
-    required this.rooms,
+    required this.selectedId,
+    required this.items,
     required this.onChanged,
+    required this.getId,
+    required this.getName,
+    required this.hintText,
+    required this.title,
   });
 
   @override
@@ -23,7 +30,7 @@ class DropdownDeviceSession extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
-            "Room:",
+            title,
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge
@@ -34,12 +41,17 @@ class DropdownDeviceSession extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           child: CustomDropdown<String>(
-            selectedItem: selectedRoomId,
-            items: rooms.map((room) => room.id).toList(),
-            hintText: 'Select room',
+            selectedItem: selectedId,
+            items: items.map(getId).toList(),
+            hintText: hintText,
             onChanged: onChanged,
-            itemLabelBuilder: (id) =>
-                rooms.firstWhere((room) => room.id == id).name,
+            itemLabelBuilder: (id) {
+              final item = items.cast<T?>().firstWhere(
+                    (item) => getId(item as T) == id,
+                    orElse: () => null,
+                  );
+              return item != null ? getName(item) : '';
+            },
           ),
         ),
       ],

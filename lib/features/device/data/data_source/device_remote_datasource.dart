@@ -8,8 +8,11 @@ import '../../../../core/services/logger_service.dart';
 
 abstract class DeviceRemoteDatasource {
   Future<List<Device>?> getDevices();
+  Future<Device?> getDeviceById(String deviceId);
   Future<List<Device>?> getDevicesByRoomId(String roomId);
+  Future<bool> postDevice(Device device);
   Future<bool> putDevice(Device device);
+  Future<bool> deleteDevice(String deviceId);
 }
 
 class DeviceRemoteDatasourceImpl implements DeviceRemoteDatasource {
@@ -20,6 +23,29 @@ class DeviceRemoteDatasourceImpl implements DeviceRemoteDatasource {
     required this.dio,
     required this.tokenRepository,
   });
+
+  @override
+  Future<Device?> getDeviceById(String deviceId) async {
+    try {
+      final accessToken = await tokenRepository.getAccessToken();
+      if (accessToken == null) {
+        throw Exception("Token truy cập không tồn tại");
+      }
+      final response = await dio.get('/device/$deviceId',
+          options: Options(headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          }));
+
+      return DeviceModel.fromJson(response.data['device']);
+    } on DioException catch (e) {
+      printE(
+          "[DioException] loại lỗi: ${e.type}, thông điệp lỗi: ${e.message}");
+    } catch (e) {
+      printE("Lỗi không xác định: ${e.toString()}");
+    }
+    return null;
+  }
 
   @override
   Future<List<Device>?> getDevices() async {
@@ -70,6 +96,42 @@ class DeviceRemoteDatasourceImpl implements DeviceRemoteDatasource {
   }
 
   @override
+  Future<bool> postDevice(Device device) async {
+    try {
+      final accessToken = await tokenRepository.getAccessToken();
+      if (accessToken == null) {
+        throw Exception("Token truy cập không tồn tại");
+      }
+
+      final reponse = await dio.post(
+        '/device/add',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+        ),
+        data: {
+          'name': device.name,
+          'description': device.description,
+          'state': device.state,
+          'type': device.type,
+          'gate': device.gate,
+          'roomID': device.roomID
+        },
+      );
+      return reponse.statusCode == 201;
+    } on DioException catch (e) {
+      printE(
+          "[DioException] loại lỗi: ${e.type}, thông điệp lỗi: ${e.message}");
+      return false;
+    } catch (e) {
+      printE("Lỗi không xác định: ${e.toString()}");
+      return false;
+    }
+  }
+
+  @override
   Future<bool> putDevice(Device device) async {
     try {
       final accessToken = await tokenRepository.getAccessToken();
@@ -91,11 +153,38 @@ class DeviceRemoteDatasourceImpl implements DeviceRemoteDatasource {
           'state': device.state,
           'type': device.type,
           'gate': device.gate,
-          'roomID': device.roomID,
-          'userID': device.userID,
+          'roomID': device.roomID
         },
       );
       return reponse.statusCode == 200;
+    } on DioException catch (e) {
+      printE(
+          "[DioException] loại lỗi: ${e.type}, thông điệp lỗi: ${e.message}");
+      return false;
+    } catch (e) {
+      printE("Lỗi không xác định: ${e.toString()}");
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> deleteDevice(String deviceId) async {
+    try {
+      final accessToken = await tokenRepository.getAccessToken();
+
+      if (accessToken == null) {
+        throw Exception("Token truy cập không tồn tại");
+      }
+      final respose = await dio.delete(
+        '/device/delete/$deviceId',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+      return respose.statusCode == 200;
     } on DioException catch (e) {
       printE(
           "[DioException] loại lỗi: ${e.type}, thông điệp lỗi: ${e.message}");
