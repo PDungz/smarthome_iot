@@ -34,13 +34,13 @@ class WebSocketService {
 
   // Cập nhật trạng thái thiết bị
   void updateDeviceState(
-      String deviceType, String state, String gate, String ip) {
+      String deviceType, String state, String gate, String accessKey) {
     final Map<String, dynamic> controlData = {
       "type": "control",
       "deviceType": deviceType,
       "state": state,
       "gate": gate,
-      "ip": ip
+      "accessKey": accessKey
     };
     printI("RegisterData: ${jsonEncode(controlData)}");
     _sendData(controlData);

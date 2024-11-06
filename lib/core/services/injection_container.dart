@@ -6,6 +6,9 @@ import 'package:smarthome_iot/core/common/global_setting/data/datasources/global
 import 'package:smarthome_iot/core/common/global_setting/data/repostitories/global_repository_impl.dart';
 import 'package:smarthome_iot/core/common/global_setting/domain/repositories/global_repository.dart';
 import 'package:smarthome_iot/core/common/global_setting/domain/usecase/global_info_usecases.dart';
+import 'package:smarthome_iot/features/accesskey/data/datasource/accesskey_remote_datasource.dart';
+import 'package:smarthome_iot/features/accesskey/data/repositories/accesskey_repository_impl.dart';
+import 'package:smarthome_iot/features/accesskey/domain/repositories/accesskey_repository.dart';
 import 'package:smarthome_iot/features/device/data/data_source/device_remote_datasource.dart';
 import 'package:smarthome_iot/features/room/data/datasource/room_remote_datasource.dart';
 import 'package:smarthome_iot/features/device/data/repositories/device_repository_impl.dart';
@@ -79,6 +82,12 @@ Future<void> init() async {
         tokenRepository: getIt<TokenRepository>()),
   );
 
+  getIt.registerLazySingleton<AccessKeyRemoteDatasource>(
+    () => AccessKeyRemoteDatasourceImpl(
+        dio: getIt<DioClient>().externalDio,
+        tokenRepository: getIt<TokenRepository>()),
+  );
+
   //! Repository
   getIt.registerLazySingleton<GlobalRepository>(
       () => GlobalRepositoryImpl(globalInfoLocalDataSource: getIt()));
@@ -107,6 +116,10 @@ Future<void> init() async {
   getIt.registerLazySingleton<NotificationActionRepository>(
     () => NotificationActionRepositoryImpl(
         notificationActionRemoteDatasource: getIt()),
+  );
+
+  getIt.registerLazySingleton<AccessKeyRepository>(
+    () => AccessKeyRepositoryImpl(remoteDatasource: getIt()),
   );
 
   //! Usecase
