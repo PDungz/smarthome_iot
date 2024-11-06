@@ -17,6 +17,9 @@ import 'package:smarthome_iot/features/home/presentation/view/rooms_session.dart
 import 'package:smarthome_iot/features/home/presentation/view/weather_session.dart';
 import 'package:smarthome_iot/features/setting/presentation/logic_holder/user_bloc/user_bloc.dart';
 
+import '../../../core/constants/colors/app_colors.dart';
+import '../../../core/enums/status_state.dart';
+import '../../../core/routes/app_routes.dart';
 import '../../../core/services/logger_service.dart';
 import '../../../core/services/websocket_service.dart';
 import '../../device/domain/entities/device.dart';
@@ -29,12 +32,10 @@ class HomeRoutes extends StatefulWidget {
 }
 
 class _HomeRoutesState extends State<HomeRoutes> {
-  String temperature = "";
-  String humidity = "";
   late WebSocketService webSocketService;
   late String roomId = ""; // Khởi tạo roomId
   Map<String, dynamic> responseWebSocket = {};
-  late String esp_ip = "";
+  late String accessKey = "";
 
   double currentGasValue = 0;
   double currentHumidity = 0;
@@ -62,7 +63,7 @@ class _HomeRoutesState extends State<HomeRoutes> {
     webSocketService.stream.listen((event) {
       final newResponse = jsonDecode(event)['data'];
 
-      // esp_ip ??= newResponse['ip'];
+      // accessKey ??= newResponse['ip'];
       // printE("WebSocket Response: $newResponse");
       // printS(
       //     "WebSocket Response: ${newResponse['gas_value']} -- ${newResponse['humidity']} -- ${newResponse['temperature']}");
@@ -84,7 +85,7 @@ class _HomeRoutesState extends State<HomeRoutes> {
 
         setState(() {
           // Cập nhật giá trị nếu có sự thay đổi
-          esp_ip = newResponse['ip'];
+          accessKey = newResponse['accessKey'];
           currentGasValue = newGasValue;
           currentHumidity = newHumidity;
           currentTemperature = newTemperature;
@@ -114,7 +115,7 @@ class _HomeRoutesState extends State<HomeRoutes> {
               DeviceRepositoryImpl(remoteDatasource: getIt()),
               webSocketService,
               getIt())
-            ..add(LoadDevice(roomId: roomId)),
+            ..add(LoadDeviceByRoomId(roomId: roomId)),
         ),
         // BlocProvider<WebsocketBloc>(
         //   create: (context) => WebsocketBloc(
@@ -127,147 +128,195 @@ class _HomeRoutesState extends State<HomeRoutes> {
         //       UserBloc(UserRepositoryImpl(userRemoteDataSource: getIt())),
         // )
       ],
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: CustomScrollView(
-            scrollDirection: Axis.vertical,
-            slivers: [
-              const SliverToBoxAdapter(child: SizedBox(height: 10)),
-              const SliverToBoxAdapter(
-                  child:
-                      WeatherSession(temperature: "100°C", humidity: "100%")),
-              // SliverToBoxAdapter(
-              //     child: BlocBuilder<WebsocketBloc, WebsocketState>(
-              //   builder: (context, state) {
-              //     if (state is WebsocketLoading) {
-              //       return const Center(
-              //         child: CircularProgressIndicator(),
-              //       );
-              //     } else if (state is SensorDataLoaded) {
-              //       return TempHumGasSession(
-              //         responseWebSocket: responseWebSocket,
-              //       );
-              //     }
-              //     return const SizedBox();
-              //   },
-              // )),
-              SliverToBoxAdapter(
-                child: BlocBuilder<UserBloc, UserState>(
-                  builder: (context, state) {
-                    if (state is UserLoading) {
-                      return const TempHumGasSessionLoading();
-                    } else if (state is UserLoaded) {
-                      _initializeWebSocket(state.user.id);
-                      return TempHumGasSession(
-                          responseWebSocket: responseWebSocket);
-                    }
-                    return const SizedBox();
-                  },
-                ),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 4)),
-              // Hiển thị danh sách phòng
-              SliverToBoxAdapter(
-                child: BlocBuilder<RoomBloc, RoomState>(
-                  builder: (context, state) {
-                    if (state is RoomLoading) {
-                      return const RoomsSessionLoading();
-                    } else if (state is RoomsLoaded) {
-                      return RoomsSession(
-                        rooms: state.rooms,
-                        onRoomSelected: (String selectedRoomId) {
-                          // Cập nhật roomId và gọi LoadDevice với roomId mới
-                          setState(() {
-                            roomId = selectedRoomId; // Cập nhật roomId
-                          });
-                          context.read<DeviceBloc>().add(
-                              LoadDevice(roomId: roomId)); // Gọi LoadDevice
-                        },
-                      );
-                    } else if (state is RoomError) {
-                      return Center(child: Text("Error: ${state.Msg}"));
-                    }
-                    return const SizedBox();
-                  },
-                ),
-              ),
-              // Hiển thị danh sách thiết bị dựa trên roomId đã chọn
-              BlocBuilder<DeviceBloc, DeviceState>(
-                builder: (context, state) {
-                  if (state is DeviceLoading) {
-                    // Hiển thị loading khi đang tải thiết bị
-                    return SliverGrid(
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 300,
-                        mainAxisSpacing: 12,
-                        crossAxisSpacing: 12,
-                        childAspectRatio: 0.8,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          return const DeviceSessionLoading();
-                        },
-                        childCount: 6,
-                      ),
-                    );
-                  } else if (state is DevicesLoaded) {
-                    // Kiểm tra danh sách thiết bị có trống không
-                    if (state.devices.isEmpty) {
-                      return const SliverToBoxAdapter(
-                          child: Center(child: Text("No devices found")));
-                    }
-                    return SliverGrid(
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 300,
-                        mainAxisSpacing: 12,
-                        crossAxisSpacing: 12,
-                        childAspectRatio: 0.8,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          Map icons = {
-                            'LIGHT': AppIcons.LIGHT,
-                            'FAN': AppIcons.FAN,
-                            'SERVO': AppIcons.DOOR,
-                            'KLAXON': AppIcons.KLAXON
-                          };
-                          final device = state.devices[index];
-                          return DeviceSession(
-                            id: device.id,
-                            iconDevice: icons[device.type],
-                            device: device.name,
-                            decs: device.description,
-                            isActive: device.state == 'ON',
-                            onToggle: (value) {
-                              final updatedDevice = device.copyWith(
-                                state: value
-                                    ? 'ON'
-                                    : 'OFF', // Toggle giữa ON và OFF
-                              );
-                              context.read<DeviceBloc>().add(UpdateDevice(
-                                  device: updatedDevice, esp_ip: esp_ip));
+      child: BlocConsumer<DeviceBloc, DeviceState>(
+        listener: (context, state) {
+          if (state is DeviceDeleted) {
+            if (state.state == StatusState.success) {
+              _showDialog("Success", "Device deleted succcessfully");
+            } else if (state.state == StatusState.failure) {
+              _showDialog("Error", state.message ?? "Failed to delete device");
+            }
+          }
+        },
+        builder: (context, state) {
+          return Scaffold(
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: CustomScrollView(
+                scrollDirection: Axis.vertical,
+                slivers: [
+                  const SliverToBoxAdapter(child: SizedBox(height: 10)),
+                  const SliverToBoxAdapter(child: WeatherSession()),
+                  // SliverToBoxAdapter(
+                  //     child: BlocBuilder<WebsocketBloc, WebsocketState>(
+                  //   builder: (context, state) {
+                  //     if (state is WebsocketLoading) {
+                  //       return const Center(
+                  //         child: CircularProgressIndicator(),
+                  //       );
+                  //     } else if (state is SensorDataLoaded) {
+                  //       return TempHumGasSession(
+                  //         responseWebSocket: responseWebSocket,
+                  //       );
+                  //     }
+                  //     return const SizedBox();
+                  //   },
+                  // )),
+                  SliverToBoxAdapter(
+                    child: BlocBuilder<UserBloc, UserState>(
+                      builder: (context, state) {
+                        if (state is UserLoading) {
+                          return const TempHumGasSessionLoading();
+                        } else if (state is UserLoaded) {
+                          _initializeWebSocket(state.user.id);
+                          return TempHumGasSession(
+                              responseWebSocket: responseWebSocket);
+                        }
+                        return const SizedBox();
+                      },
+                    ),
+                  ),
+                  const SliverToBoxAdapter(child: SizedBox(height: 4)),
+                  // Hiển thị danh sách phòng
+                  SliverToBoxAdapter(
+                    child: BlocBuilder<RoomBloc, RoomState>(
+                      builder: (context, state) {
+                        if (state is RoomLoading) {
+                          return const RoomsSessionLoading();
+                        } else if (state is RoomsLoaded) {
+                          return RoomsSession(
+                            rooms: state.rooms,
+                            onRoomSelected: (String selectedRoomId) {
+                              // Cập nhật roomId và gọi LoadDevice với roomId mới
+                              setState(() {
+                                roomId = selectedRoomId; // Cập nhật roomId
+                              });
+                              context.read<DeviceBloc>().add(LoadDeviceByRoomId(
+                                  roomId: roomId)); // Gọi LoadDevice
                             },
                           );
-                        },
-                        childCount: state.devices.length,
-                      ),
-                    );
-                  } else if (state is DeviceError) {
-                    return SliverToBoxAdapter(
-                      child: Center(child: Text("Error: ${state.Msg}")),
-                    );
-                  }
-                  return const SliverToBoxAdapter(child: SizedBox());
-                },
+                        } else if (state is RoomError) {
+                          return Center(child: Text("Error: ${state.Msg}"));
+                        }
+                        return const SizedBox();
+                      },
+                    ),
+                  ),
+                  // Hiển thị danh sách thiết bị dựa trên roomId đã chọn
+                  BlocBuilder<DeviceBloc, DeviceState>(
+                    builder: (context, state) {
+                      if (state is DeviceLoading) {
+                        // Hiển thị loading khi đang tải thiết bị
+                        return SliverGrid(
+                          gridDelegate:
+                              const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 300,
+                            mainAxisSpacing: 12,
+                            crossAxisSpacing: 12,
+                            childAspectRatio: 0.8,
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return const DeviceSessionLoading();
+                            },
+                            childCount: 6,
+                          ),
+                        );
+                      } else if (state is DevicesLoaded) {
+                        // Kiểm tra danh sách thiết bị có trống không
+                        if (state.devices.isEmpty) {
+                          return const SliverToBoxAdapter(
+                              child: Center(child: Text("No devices found")));
+                        }
+                        return SliverGrid(
+                          gridDelegate:
+                              const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 300,
+                            mainAxisSpacing: 12,
+                            crossAxisSpacing: 12,
+                            childAspectRatio: 0.8,
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              Map icons = {
+                                'LIGHT': AppIcons.LIGHT,
+                                'FAN': AppIcons.FAN,
+                                'SERVO': AppIcons.DOOR,
+                                'KLAXON': AppIcons.KLAXON,
+                                'AIR_CONDITIONER': AppIcons.FAN
+                              };
+                              final device = state.devices[index];
+                              return DeviceSession(
+                                id: device.id,
+                                iconDevice: icons[device.type],
+                                device: device.name,
+                                decs: device.description,
+                                isActive: device.state == 'ON',
+                                onToggle: (value) {
+                                  final updatedDevice = device.copyWith(
+                                    state: value
+                                        ? 'ON'
+                                        : 'OFF', // Toggle giữa ON và OFF
+                                  );
+                                  context.read<DeviceBloc>().add(UpdateDevice(
+                                      device: updatedDevice,
+                                      accessKey: accessKey));
+                                },
+                              );
+                            },
+                            childCount: state.devices.length,
+                          ),
+                        );
+                      } else if (state is DeviceError) {
+                        return SliverToBoxAdapter(
+                          child: Center(child: Text("Error: ${state.message}")),
+                        );
+                      }
+                      return const SliverToBoxAdapter(child: SizedBox());
+                    },
+                  ),
+                  const SliverToBoxAdapter(child: SizedBox(height: 100)),
+                ],
               ),
-              const SliverToBoxAdapter(child: SizedBox(height: 100)),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
+    );
+  }
+
+  void _showDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColors.backgroundColor,
+          title: Text(
+            title,
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall
+                ?.copyWith(color: AppColors.textPrimaryColor),
+          ),
+          content: Text(
+            message,
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge
+                ?.copyWith(color: AppColors.textSecondarColor),
+          ),
+          actions: [
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () => Navigator.pushNamed(
+                context,
+                AppRoutes.entry_point,
+                arguments: [0, ""],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

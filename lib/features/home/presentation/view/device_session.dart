@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:smarthome_iot/core/routes/app_routes.dart';
-import 'package:smarthome_iot/core/services/logger_service.dart';
 import '../../../../core/constants/colors/app_colors.dart';
 import '../../../../core/constants/icons/app_icons.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../device/presentation/logic_holder/bloc_device/device_bloc.dart';
 
 class DeviceSession extends StatefulWidget {
   final String id;
@@ -133,7 +134,7 @@ class _DeviceSessionState extends State<DeviceSession> {
                       ),
                       onPressed: () => Navigator.pushNamed(
                           context, AppRoutes.entry_point,
-                          arguments: [7, widget.id]),
+                          arguments: [8, widget.id]),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -162,7 +163,9 @@ class _DeviceSessionState extends State<DeviceSession> {
                             AppColors.buttonDeleteColor, // Set background color
                       ),
                       onPressed: () {
-                        printE(widget.id);
+                        context
+                            .read<DeviceBloc>()
+                            .add(DeleteDevice(deviceId: widget.id));
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,

@@ -5,13 +5,13 @@ class Websocket {
   final double gasValue;
   final double humidity;
   final double temperature;
-  final String ip;
+  final String accessKey;
 
   Websocket({
     required this.gasValue,
     required this.humidity,
     required this.temperature,
-    required this.ip,
+    required this.accessKey,
   });
 
   Map<String, dynamic> toMap() {
@@ -19,7 +19,7 @@ class Websocket {
       'gasValue': gasValue,
       'humidity': humidity,
       'temperature': temperature,
-      'ip': ip,
+      'accessKey': accessKey,
     };
   }
 
@@ -28,7 +28,7 @@ class Websocket {
       gasValue: map['gas_value'] as double,
       humidity: map['humidity'] as double,
       temperature: map['temperature'] as double,
-      ip: map['ip'] as String,
+      accessKey: map['accessKey'] as String,
     );
   }
 
