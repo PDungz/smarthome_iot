@@ -3,6 +3,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome_iot/core/constants/colors/app_colors.dart';
 import 'package:smarthome_iot/core/services/injection_container.dart';
+import 'package:smarthome_iot/features/accesskey/presentation/view_accesskey_routes.dart';
 import 'package:smarthome_iot/features/add/presentation/add_routes.dart';
 import 'package:smarthome_iot/features/device/presentation/add_device_routes.dart';
 import 'package:smarthome_iot/features/device/presentation/update_device_routes.dart';
@@ -51,7 +52,10 @@ class _EntryPointState extends State<EntryPoint> {
         // Device
         const ViewDeviceRoutes(),
         const AddDeviceRoutes(),
-        const UpdateDeviceRoutes(),
+        UpdateDeviceRoutes(deviceId: widget.id),
+
+        // AccessKey
+        const ViewAccesskeyRoutes(),
       ];
 
   @override
